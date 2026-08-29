@@ -1,0 +1,312 @@
+
+ML & AI --> 
+- Gen-AI
+
+
+Skillfyme 
+
+MLOps Master Programme Certification 
+Start Date: 29th Aug. 2026
+
+#######################
+Day 1 | 29th Aug. 2026
+#######################
+
+- MLOps Fundamentals :::
+
+
+	Pre-requisites :::
+	
+		- DevOps Skills 
+		
+		- DevOps Tools :
+		
+			- GIT, Docker, Kubernetes 
+			
+			- Build Orchestration - Jenkins, GitHub-Actions
+			
+			- Monitoring - Prometheus, Grafana
+			
+			
+	What is MLOps ?
+		--> Automate ML Model Builds and Deployments + Data validation & Data Processing.
+	
+	What is DevOps ?
+	
+		--> Automate Application Builds and Deployments.
+	
+	What is DevOps ?????
+	
+		-> Need for DevOps 
+		
+		
+	Software Development LifeCycle
+
+	- Requirement Analysis
+	- Design & Documentations
+	- Code 
+	- Test
+	- Implement to Production
+	- Monitor/Maintain
+	
+		- Waterfall Model 
+			- Linear in fashion - Based on top-down approach
+			- It was used for Monolith Application Architecture
+			- Tightly coupled Architecture
+			
+	- Mobile Application: 
+
+		- To develop Retail Shopping App.
+			- Functions:
+				- Create User Interface
+				- Sign-Up
+				- Sign-In
+				- Search 
+				- Add to Cart 
+				- Payment -> UPI/Online Payment Mode --> Credit Card & New payment Credit Points
+				- Confirm Order 
+				- Track 
+				
+			
+	Core Project		
+	- Requirement Analysis --> 
+	- Design & Documentations -> 10 Months 
+	- Code 					  -> 6th Month *******
+	- Test
+	- Implement to Production
+	- Monitor/Maintain	
+		
+	Enhancement Project 
+	- Requirement Analysis --> --> Credit Card & New payment Credit Points
+	- Design & Documentations 
+	- Code 					  
+	- Test
+	- Implement to Production
+	- Monitor/Maintain		
+		
+		
+	- AGILE Methodoligies :::
+	
+		- To develop Retail Shopping App.
+			- Functions - Iterations:
+				- Create User Interface
+				- Sign-Up
+				- Sign-In
+				- Search 
+				- Add to Cart 
+				- Payment -> UPI/Online Payment Mode --> Credit Card & New payment Credit Points
+				- Confirm Order 
+				- Track 	
+		
+	Iteration 1: Create User Interface	
+
+		- Requirement Analysis
+		- Design & Documentations
+		- Code 
+		- Test
+		- Implement to Production with proper approvals
+
+	Iteration 2: Sign-Up
+
+		- Requirement Analysis
+		- Design & Documentations
+		- Code 
+		- Test
+		- Implement to Production with proper approvals
+
+	Iteration 3: Sign-In
+
+		- Requirement Analysis
+		- Design & Documentations
+		- Code 
+		- Test
+		- Implement to Production with proper approvals
+
+	nth Iteration : Credit Card & New payment Credit Points
+
+		- Requirement Analysis
+		- Design & Documentations
+		- Code 
+		- Test
+		- Implement to Production with proper approvals
+		
+		Using AGILE Methodoligies:
+		
+			We can able to achieve:
+			
+				- Continuous Development
+				- Continuous Integration
+				- Continuous Testing 
+				- Continuous Delivery 
+					- It is process to release the changes to production with manual approvals
+
+			We cannot achieve:
+				- Continuous Deployment
+					- It is process to release the changes to production without any manual approvals
+
+	- DevOps ::::
+		
+		- DevOps is a Software Development Strategy, used to promote the collaboration between teams like Development Team and Operations Team to achieve Continuous Development, Continuous Integration, Continuous Testing, Continuous Delivery, Continuous Deployment and Continuous Monitoring in more automated fashion.
+
+	Teams Involved :
+	
+		- Infra-Structure Management Team 
+		- Application Development Team 
+		- Testing Team
+		- Release Management Team 
+		- Production Monitoring Team 
+		- Production Support Team 
+		- IT Security 
+		
+	- MLOps ::::
+		
+		- Strategy used to automate the ML Model LifeCycle used to support Data Engineers, ML Engineers.
+	
+	Teams Involved :
+	
+		- Infra-Structure Management Team 
+		- Data Scientists/Engineering Team
+		- ML Engineering Team 
+		- Release Management Team 
+		- Production Monitoring Team 
+		- Production Support Team 
+		- IT Security 		
+	
+	Environments :
+	
+		DevOps Workflow :
+		
+		
+		Non-Prod Environments									Prod Environment
+		
+			Dev Environment
+			
+			Build Environment
+			
+			Test 
+			
+				QA
+				
+				UAT 				===============>				Production Servers(1,2,3,4,5) - LIVE
+		
+		
+		MLOps Workflow :
+
+		Non-Prod Environments									Prod Environment
+		
+			Dev Environment
+			
+			Build Environment
+			
+			Staging 				===============>				Production Servers(1,2,3,4,5) - LIVE 
+			
+	How to Implement DevOps & MLOps ???
+	
+		- Build Collaboration & Identify the scope for automation
+		
+		
+		DevOps/MLOps Team :
+		
+			- Infra-Structure Management Team  --> Provision / Configure IT Resources --> IAC - Terraform/Ansible
+			- Data Scientists/Engineering Team
+			- ML Engineering Team 
+			- Application Development Team 
+			- Testing Team
+			- Release Management Team 
+			- Production Monitoring Team 
+			- Production Support Team 
+			- IT Security 
+			
+			
+		- Stages of DevOps :
+		
+			- Continuous Development :
+				- It is the capability of the Development Team to Continuously Develop the Application Source Code.
+				- It is used to Improve Developer's Productivity, by using intuitive Tools like Modern IDEs, GIT, DVC Pipelines
+				
+				
+			- Continuous Integration :
+				- It is the capability of the Development Team to Continuously Integrate the Changes for further testing.
+				
+				- Automated :
+				
+					- Build
+					- Packaging 
+					- Unit Testing					
+					- Promote to Test Environment
+					- Notify thru Email
+				
+			- Continuous Testing :
+				- It is the capability of the Testing Team to Continuously Test the Changes.
+				
+					- Selenium
+					
+					- MLFlow 
+					- Monitoring Services 
+					
+					
+			- Continuous Delivery/Deployment :::
+			
+				- Continuous Delivery 
+					- It is process to release the changes to production with manual approvals
+					- This ia applicable for Monolith Application Architecture
+					- Leads to Application Downtime during Production Releases.
+
+				- Continuous Deployment
+					- It is process to release the changes to production without any manual approvals
+					- Can be achieved only with the Micro-Service Based Application Architecture
+					- With this we can achieve Zero-Downtime during Production Releases.
+					
+					
+				- Docker,Kubernetes,KubeFlow,GitHub-Actions
+
+
+		- To develop Retail Shopping App.
+			- Micro-Services :::: 
+				- Create User Interface
+				- Sign-Up
+				- Sign-In
+				- Search 
+				- Add to Cart 
+				- Payment -> UPI/Online Payment Mode --> Credit Card & New payment Credit Points
+				- Confirm Order 
+				- Track 
+
+			- Continuous Monitoring :
+			
+				Infra-Structure :
+				
+					- Prometheus& Grafana
+					- MLOps --> MLFlow,KubeFlow,Kubernetes Monitoring Dashboards
+					
+		
+		- Stages of MLOps :
+		
+			- Data Extration 
+			- Data Validation
+			- Data Processing
+			- Train the Model(Recursive Process)
+			- Test the Model for Accuracy
+			- Generate Reports
+			- Notify the Users(Data & ML Engineers)
+			- Package 
+			- Deploy to Production 
+			- Monitor
+			
+			
+		
+			-> Linear Regression Algorithm ::::
+			-> Sentiment Analyzer ::::
+			
+			
+			- Use Case :::
+			
+				-> Amazon.com => Customer feedback.
+				
+
+Next :
+
+				
+	- Data Pipeline & ML Pipeline :::
+	
+	
