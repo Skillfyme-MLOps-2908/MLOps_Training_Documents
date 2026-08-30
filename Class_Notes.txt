@@ -309,4 +309,309 @@ Next :
 				
 	- Data Pipeline & ML Pipeline :::
 	
+
+
+#######################
+Day 2 | 30th Aug. 2026
+#######################	
 	
+	- Data Pipeline & ML Pipeline :::
+	
+	
+	- Use Case : Knowledge Bot :::
+	
+	
+		- Data Source --> Created Model with 98% Accuracy --> Deployment --> Aug.2026 - V1
+			
+	Lab Requirements ::::
+	
+	
+		- Create AWS Cloud Free-Tier Account
+		
+			- Active Email_ID, Phone_Number, Credit/Debit Card 
+			
+			- https://aws.amazon.com/console/
+			
+			- Use EC2 Service to Create EC2 Instances/VMs 
+			
+				- Setup the Dev, Build and Target Environments
+				
+			- Use S3 Service to Create S3 Buckets 
+				
+				- Maintain the Datasets & its Versions
+				- Maintain the Versions of ML Model Artifact - *.pkl files
+
+			- Explore AWS SageMaker-AI
+		
+		- GitHub Account 
+			- https://github.com
+		
+		- Install Git Client on Local Machine 
+		
+		- DockerHub Account 
+			- https://hub.docker.com
+		
+		- Install VS Code 
+		
+			- https://code.visualstudio.com/download
+			
+			
+	
+	Data :
+	
+		--> Version Control System :		
+	
+	What is Version Control System?
+	
+		- It is used to Version Control the Source Code Changes 
+		- It is used to Track the Changes
+	
+	Versioning:
+	
+	ML Perspective:
+	
+		- Create Python Programs 	--> ML Algorithms					-> GitHub for Source Code 
+		
+		- Create Dataset 			--> Processed Data					-> S3 Buckets for Datasets 
+
+		- Create Model Artifacts 	--> Model Binaries					-> S3 Buckets for ML Artifacts/*.pkl files
+
+		- Create Container Images 	--> ML Model Application Images		-> DockerHub for ML Container Images  
+
+	
+
+	DevOPs CICD Pipelines :::
+	
+		Stages : 
+		
+			- SCM_Checkout
+			- Application_Build
+			- Application_Image_Build
+			- Publish Application_Image to DockerHub 
+			- Deploy Application_Image to Kubernetes Cluster 
+			
+			
+	MLOps CICD Pipelines :::
+	
+		Stages : 		
+
+			- DataSet_Checkout
+			- Data_Pipeline - Validate_Data,Process_Data 
+			- SCM_Checkout - ML Logics
+				-> WEB_UI Components 
+				-> API Components 
+			- ML_Application_Build	--> Train the Model and Create ML Artifacts - *.pkl files
+			- ML_Application_Image_Build
+			- Deploy using Kubernetes Test Instances
+			- Test and Evaluate the Model 
+			- Deploy using Kubernetes Prod Instances
+	
+
+	- Version Control System using GIT :::
+	
+		- Git is an open-source Version Control System
+		- Git is used to Version Control the Source Code Changes
+		- Used to Track the Source Code Changes 
+		- Used to perform Parallel Development using Branching Techniques
+		
+	
+	-> Working with GIT :
+	
+		- Install git client on Local Machine 
+		- git (vs) github
+		- Core git Concepts 	
+		
+	-> Git Concepts:
+	
+		- Setup Git Client on the Dev and Build Environments
+			https://git-scm.com/install/
+			https://git-scm.com/install/windows
+				Standalone Installer
+					- Choose: Git for Windows/x64 Setup.
+					- Goto Downloads folder and execute the exec file to install GIT Client.
+						- Git Bash	** Default 
+						- Git CMD 
+						- GIT GUI
+					
+					
+			git --version 
+			
+			Create Application Workspace Directory 
+			
+			
+			ML_Application_Project 
+				- SRC
+					*.py
+					web_ui.py
+					app_api.py
+					
+					
+					
+			
+			
+			
+			
+		- Git File Workflow ::::
+
+			- GIT is a Open-Source Distributed Version Control System 
+			
+			
+		
+		Local_Machine																							Remote Server 
+		
+			Working Directory 	---------------->	Staging Area  --------------->	Local Repository	--------> 	Remote Repository
+				index.html			git add 		 index.html		git commit 			index.html_v1.0	  git push  	index.html_v1.0
+				index.html			git add 		 index.html		git commit 			index.html_v2.0	  git push  	index.html_v2.0
+				index.html			git add 		 index.html		git commit 			index.html_v3.0	  git push  	index.html_v3.0			
+				index.html			git add 		 index.html		git commit 			index.html_v4.0	  git push  	index.html_v4.0			
+		
+		- Misc. Git Cli Command 
+		
+			- Create Local Git Repository :
+			
+				- git init 			# To initialize Local Git Repository				
+			
+				- git add			# To Add the changes from Working Directory to Staging Area 
+
+				- git commit 		# To Commit the Changes from Staging Area to Local Repository
+				
+				- git push 			# To Push the changes from Local Repository to Remote Repository
+				
+				- git clone 		# To Copy/Clone the Entire Remote Repository to Local Machine
+				
+				- git Fetch/Pull :::
+		
+					-> Both Git fetch and pull are used handle the incremental changes from remote repository.
+					
+					Git Fetch :
+					
+						- It is used to just check for the incremental changes from remote repository, if any incremental changes exist, it will update the details of the changes only in local repository. Git fetch will never Update the Working Directory.
+						
+						- Do explicit merge to update the Working Directory					
+						
+				
+					git Pull :
+					
+						- It is used to check for the incremental changes from remote repository, if any incremental changes exist, it will update the details of the changes in local repository as well as in the Working Directory.	
+
+						- Git Pull is used to Keep the Local Repository In-Sync with Remote Repository
+						
+						
+						- git pull ==> git fetch + git merge 
+		
+		
+				- Fork 				# Is used to Copy one Remote Repository to Another Remote Repository
+
+				- git init 			# To initialize New Local Git Repository
+									# Create .git Directory
+									# Create a default branch - main/master Branch
+									
+									
+
+		Developers' Workload
+
+			- Create New Project 
+			
+			- Enhancement/Bug fix project 
+			
+			
+			cd d:
+			
+			mkdir GIT_Practise
+			
+			cd GIT_Practise
+				
+			mkdir Project_Repo1
+			mkdir Project_Repo2
+			mkdir Project_Repo3
+			
+			cd Project_Repo1
+			
+				git init 
+				
+				
+		
+		- Create Local Repositories 
+		
+			
+		- git status			# Get the current status of a repositor		
+		
+		git log --oneline 		# get short commit id 
+		
+		git log -3
+		
+		git log --oneline -3 
+		
+		
+		- git add :::
+		
+			git add <file_Name>
+			git add <file_Name1> <file_Name2>
+			git add *.txt
+			git add .		## '.' denotes list of all untracked files to be added to higher environment
+
+					
+  502  git --version
+  503  cd d:
+  504  mkdir skillfyme_3008
+  505  cd skillfyme_3008/
+  506  pwd
+  507  mkdir repo1
+  508  mkdir repo2
+  509  ls
+  510  cd kear
+  511  clear
+  512  cd repo
+  513  cd repo1/
+  514  clear
+  515  ls
+  516  pwd
+  517  git init
+  518  ls
+  519  ls -a
+  520  cd .git/
+  521  ls
+  522  cd ..
+  523  ls
+  524  ls -a
+  525  clear
+  526  ls
+  527  ls
+  528  echo "rec1" >> f1.txt
+  529  ls
+  530  git status
+  531  git add f1.txt
+  532  git status
+  533  git commit -m "Created f1.txt - Temp file"
+  534  git log
+  535  echo "rec1" >> f2.txt
+  536  ls
+  537  git status
+  538  git add f2.txt
+  539  git status
+  540  git commit -m "Create f2.txt"
+  541  git status
+  542  ls
+  543  git log
+  544  git log --oneline
+  545  git log -1
+  546  echo "rec2" >> tempfile.txt
+  547  ls
+  548  git status
+  549  git add tempfile.txt
+  550  git commit -m "Created TEmp file"
+  551  git log --oneline
+  552  history
+
+		
+		
+		
+		
+Next :::		
+			
+			
+		- GitIgnore ::::					
+		- Git Branching Strategies 
+		- Handling Remote GIT Repositories using Visual Studio Code 
+		
+		- DVC Pipleine
