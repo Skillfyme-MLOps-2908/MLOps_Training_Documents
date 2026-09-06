@@ -615,3 +615,477 @@ Next :::
 		- Handling Remote GIT Repositories using Visual Studio Code 
 		
 		- DVC Pipleine
+
+
+
+		
+
+#######################
+Day 3 | 5th Sep. 2026
+#######################	
+
+	Overview of MLOps 
+	
+	Version Control 
+			- Create Local Repositories 
+		
+			
+		- git status			# Get the current status of a repositor		
+		
+		git log --oneline 		# get short commit id 
+		
+		git log -3
+		
+		git log --oneline -3 
+		
+		
+		- git add :::
+		
+			git add <file_Name>
+			git add <file_Name1> <file_Name2>
+			git add *.txt
+			git add .		## '.' denotes list of all untracked files to be added to higher environment
+			
+
+
+#######################
+Day 4 | 6th Sep. 2026
+#######################		
+		
+		
+	Misc. GIT Cli Commands :
+	
+	
+	Create commits 
+	
+	Setup git config 
+	
+	Git Ignore
+	
+	Undo the changes :
+	
+		- Unstage 
+		
+		- Reset / Revert 
+		
+	Working with Branches
+	
+	Branching Strategies
+	
+		- Rebase 
+		
+		- Squash 
+		
+	Stash 
+	
+	Remote Repositories 
+	
+		- Create Remote Repos 
+		
+		- Pull Request 
+		
+	Using VS Code 
+	
+	
+
+	ML Project:
+	
+	
+	
+	Unstage :
+	
+		git rm --cached <file_name>		# Used to remove the changes from staging area and take the changes back to working directory
+		
+		
+		git rm -f <file_Name>			# Used to remove the changes from staging area and working directory
+		
+	
+	git commit ::
+	
+		git commit -m <Commit_Message>
+		
+		
+		git commit -m "CR1026 - Updated Payment Module"
+	
+	Git Log :
+	
+		git log 
+		
+		
+		git log --online 
+	
+		git show <commit_id>
+
+
+	Git Config :::
+	
+		- To set the User Email_ID & User Name
+		
+		- Setup the Global Config before the very first commit upon git installation		
+		
+		- git config --global user.name "LoksaiETA"
+		
+		- git config --global user.email "LoksaiETA@asdf.com"
+		
+		
+	ls :::
+	
+		- Is a basic linux command to get the list of files and directories from working directory
+	
+	git ls-files :::
+
+		- To get the list of files and directories that are being tracked by git.
+		
+		
+	Git Ignore ::::
+
+		- It is used to ignore the files from tracking.
+		
+		- Create .gitignore file ==> update with all the files and folders to ignore.
+		
+		- As a best practice, .gitignore should be the very first commit.
+		
+		
+		Project_Workspace 
+		
+			-> *.py 
+			-> *.py 
+			-> resources
+				-> *.html 
+				-> *.css 
+				-> *.js
+			-> DB_SECRET
+			-> Dataset 
+				-> *.xls
+				-> *.csv
+				
+			-> envi_config
+			-> app_prop
+			-> Artifacts 
+				- *.pkl
+				
+				
+		vi .gitignore
+		
+			envi_config
+	        app_prop
+		    Artifacts/ 
+		    *.pkl
+			Dataset/
+			
+		git add 
+		
+		git commit 
+		
+		
+
+	- Git Reset / Revert :::
+	
+		GIT Reset :::
+	
+			- Git Reset is used to Undo the committed changes 
+			- It used to take the HEAD Pointer back to previous commit point 
+			- git reset will never create any new commit point for tracking 
+			- So, it is not recommended to use git reset in the Shared Repositories	
+	
+			git reset <reset_option> <previous_Commit_ID>
+	
+			
+			git reset Options :::
+			
+				- git reset --soft <previous_Commit_ID>
+				
+					- To reset the HEAD Pointer to Previous Commit point
+					- Take the Changes back to Staging Area from local repository 
+					- The Changes exist in staging area as well in the working directory
+					
+				- git reset --mixed <previous_Commit_ID>									# Default
+				
+					- To reset the HEAD Pointer to Previous Commit point
+					- Take the Changes back to working directory from local repository 
+					- The Changes exist only in the working directory								
+			
+				- git reset --hard <previous_Commit_ID>
+				
+					- To reset the HEAD Pointer to Previous Commit point
+					- The files/Changes will be permanently removed from Local repository, Staging Area and Working Directory 	
+	
+	
+
+	Scenerio :::
+	
+		---> ML ==>
+		
+			Repo:
+			
+				
+				cm1 - RawData_V1	===> 		Processed		===> 	Loaded to S3 	==>  reset to previous commit
+				cm0 - .gitignore 
+
+				cm0 - .gitignore 
+				
+			ETL Process :
+			
+				Data Engineer --> 		
+				
+				Procured the Data ==> Every 1 Hr.
+				
+					cm0 - .gitignore 
+					
+					--> Raw Data ==> 	==>  Metadata --> Commit to a Repo. -- Tracking 
+					
+					--> Processed 
+					
+					--> Load to S3.
+					
+					--> Train the Model 
+					
+		
+				Procured the Data ==> Every 1 Hr.
+				
+					cm0 - .gitignore 
+					
+					--> Raw Data ==> 	==>  Metadata --> Commit to a Repo. -- Tracking 
+					
+					--> Processed 
+					
+					--> Load to S3.
+					
+						reset to previous commit
+						
+					--> Train the Model 			
+	
+	
+	
+		- GIT Revert :::
+		
+			- Git Revert is same as git reset --hard.
+			- Git Revert will create a commit point for tracking purpose
+			- Git Revert is used to revert any specific commit point.
+			- Hence, it is recommended in Shared Repositories
+			
+			
+			git revert <specific_commit_id>	
+			
+			
+	
+	GIT Branching :::
+	
+		Branching Strategies :::
+
+		- git branching techniques 
+		
+			- GIT Branch is a logical copy of a Repository(main_Branch)
+			
+			- To implement parallel development.	
+			
+			
+		- GIT Branching Strategies :::
+		
+			- It is mainly used to ensure the integrity of the Main/Master Branch(Prod Version of Source)
+			- Git Branches are used work on the Repository without impacting the main_Branch		
+		
+	
+	
+		- git branch 		# used to get the list branches 
+			
+	
+	Scenario 1:
+	
+	Repo1:
+	
+		master: cm1,cm2,cm3 
+					cm1,cm2,cm3,f1cm1,f1cm2,f1cm3			----> Upon merging feature_branch1
+					
+			feature_branch1: cm1,cm2,cm3 
+								cm1,cm2,cm3,f1cm1,f1cm2,f1cm3,.......
+								
+								
+	
+	Scenario 2:
+	
+		Repo:
+		
+			master : rel1,rel2,rel3
+							rel1,rel2,rel3,rel4							# rel4 is the merge from Developer_Branch
+				
+				Developer_Branch : rel1,rel2,rel3				
+									rel1,rel2,rel3,f1cm1,f1cm2,f1cm3,f2cm1,f2cm2,f2cm3
+				
+					feature_branch1 : rel1,rel2,rel3					
+										rel1,rel2,rel3,f1cm1,f1cm2,f1cm3					
+					
+					feature_branch2 : rel1,rel2,rel3										
+										rel1,rel2,rel3,f2cm1,f2cm2,f2cm3
+				
+	Scenario 3:
+	
+		Repo:
+		
+			master : rel1,rel2,rel3
+							rel1,rel2,rel3,rel4							# rel4 is the merge from Integration_Branch
+				
+				Integration_Branch: rel1,rel2,rel3
+									rel1,rel2,rel3,Developer_Branch1_Changes,Developer_Branch2_Changes
+				
+					Developer_Branch1 : rel1,rel2,rel3				
+										rel1,rel2,rel3,f1cm1,f1cm2,f1cm3,f2cm1,f2cm2,f2cm3
+					
+						feature_branch1 : rel1,rel2,rel3					
+											rel1,rel2,rel3,f1cm1,f1cm2,f1cm3					
+						
+						feature_branch2 : rel1,rel2,rel3										
+											rel1,rel2,rel3,f2cm1,f2cm2,f2cm3								
+					
+					Developer_Branch2 : rel1,rel2,rel3				
+										rel1,rel2,rel3,f1cm1,f1cm2,f1cm3,f2cm1,f2cm2,f2cm3
+					
+						feature_branch1 : rel1,rel2,rel3					
+											rel1,rel2,rel3,f1cm1,f1cm2,f1cm3					
+						
+						feature_branch2 : rel1,rel2,rel3										
+											rel1,rel2,rel3,f2cm1,f2cm2,f2cm3
+		
+	
+
+	Scenario 4:
+	
+		Repo:
+		
+			master : rel1,rel2,rel3
+							rel1,rel2,rel3,rel4							# rel4 is the merge from Release_Branch
+				
+				Release_Branch: rel1,rel2,rel3,Team1_Changes,Team2_changes 
+				
+					Integration_Branch1: rel1,rel2,rel3															# Team1
+										rel1,rel2,rel3,Developer_Branch1_Changes,Developer_Branch2_Changes
+					
+						Developer_Branch1 : rel1,rel2,rel3				
+											rel1,rel2,rel3,f1cm1,f1cm2,f1cm3,f2cm1,f2cm2,f2cm3
+						
+							feature_branch1 : rel1,rel2,rel3					
+												rel1,rel2,rel3,f1cm1,f1cm2,f1cm3					
+							
+							feature_branch2 : rel1,rel2,rel3										
+												rel1,rel2,rel3,f2cm1,f2cm2,f2cm3								
+						
+						Developer_Branch2 : rel1,rel2,rel3				
+											rel1,rel2,rel3,f1cm1,f1cm2,f1cm3,f2cm1,f2cm2,f2cm3
+						
+							feature_branch1 : rel1,rel2,rel3					
+												rel1,rel2,rel3,f1cm1,f1cm2,f1cm3					
+							
+							feature_branch2 : rel1,rel2,rel3										
+												rel1,rel2,rel3,f2cm1,f2cm2,f2cm3
+		
+					Integration_Branch2: rel1,rel2,rel3															# Team2
+										rel1,rel2,rel3,Developer_Branch1_Changes,Developer_Branch2_Changes
+					
+						Developer_Branch1 : rel1,rel2,rel3				
+											rel1,rel2,rel3,f1cm1,f1cm2,f1cm3,f2cm1,f2cm2,f2cm3
+						
+							feature_branch1 : rel1,rel2,rel3					
+												rel1,rel2,rel3,f1cm1,f1cm2,f1cm3					
+							
+							feature_branch2 : rel1,rel2,rel3										
+												rel1,rel2,rel3,f2cm1,f2cm2,f2cm3								
+						
+						Developer_Branch2 : rel1,rel2,rel3				
+											rel1,rel2,rel3,f1cm1,f1cm2,f1cm3,f2cm1,f2cm2,f2cm3
+						
+							feature_branch1 : rel1,rel2,rel3					
+												rel1,rel2,rel3,f1cm1,f1cm2,f1cm3					
+							
+							feature_branch2 : rel1,rel2,rel3										
+												rel1,rel2,rel3,f2cm1,f2cm2,f2cm3
+		
+	
+	
+	
+				Repo :
+				
+					master :	rel1,rel2,rel3					
+									rel1,rel2,rel3,rel3.1
+					
+						Hot_Fix : rel1,rel2,rel3,hfcm1,hfcm2,hfcm3
+						
+						Developer_Branch : rel1,rel2,rel3,rel3.1			
+											
+							feature_branch1 : rel1,rel2,rel3,rel3.1					
+												rel1,rel2,rel3,,rel3.1,f1cm1,f1cm2,f1cm3					
+							
+							feature_branch2 : rel1,rel2,rel3,rel3.1										
+												rel1,rel2,rel3,,rel3.1,f2cm1,f2cm2,f2cm3
+												
+											
+											
+	Create Branches ::::
+	
+	
+		- git branch 							# To get the list of branches 		
+			
+		- git branch <new_branch_name>			# Create New Branch		
+		
+		- git switch -c <new_branch_name>		# Create New Branch & switch the control to new_branch 
+		
+		- git switch <existing_branch_name>		# To Switch to as specific branch 
+		
+		
+		Repo1:
+		
+			master : cm1 
+			
+				feature_branch1: cm1 
+				
+									cm1,f1cm1 									
+									
+				git switch master 
+				
+				git merge feature_branch1		# Should be executed from the target branch 			
+		
+		
+	Merge Conflict :
+	
+	 Git Merge Conflicts :::
+	 
+		--> Merge Conflict occurs when more than one feature/user try to update the same file and record in the target branch.
+	
+	
+	 How to Fix the Merge Conflict ???
+	
+		--> Identify the file(s) causing the conflicts
+		
+		--> Open and Review the file content and decide, which feature changes to be retained.
+		
+		--> Update the file content: Remove the additional header and footer tags and update the records & Save
+		
+		--> Perform git add and Commit the Changes to the Target Branch
+		
+
+	On DevOps/MLOps perspective, we never fix the merge conflict.
+	
+		- We always try to prevent the conflicts.
+		
+		
+
+Next:
+
+	- Git Rebase :::
+	
+	- Git Squash Option :::
+	
+	- Git Stash :::
+	
+	- Working Remote Repositories :::
+	
+	- DVC :::
+	
+		- Core Concepts & Features 
+		
+	- AWS EC2 Instances - Ubuntu 
+	
+		- Install Git, DVC 
+		
+		- Working with DVC 
+		
+		- AWS S3 Service 
