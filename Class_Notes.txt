@@ -1381,3 +1381,510 @@ Next:
 		- AWS S3 Service 
 
 
+
+		
+#######################
+Day 5 | 12th Sep. 2026
+#######################			
+
+
+	- Git Rebase :::
+	
+	- Git Squash Option :::
+	
+	- Git Stash :::
+	
+	- Working Remote Repositories :::
+	
+	Environments :
+	
+	
+		ML 
+		
+		
+			Dev 	==> 	K8s Dev Namespace 	==> 	Pods 	==> MLflow
+			
+			Test 	==> 	K8s Test Namespace 	==> 	Pods 	==> MLflow
+			
+			Prod 	==> 	K8s Prod Namespace 	==> 	Pods 	==> MLflow
+			
+			
+		Docker & Kubernetes :::
+		
+		
+	ML Project :
+	
+		-> DVC 
+		
+		-> GitHub 
+		
+		-> S3 
+		
+		-> MLFlow
+		
+		-> Streamlit - UI 
+		
+		-> Fast-API 
+		
+		-> Monitoring & Experimentations 
+		
+			-> Prometheus & Grafana & MLflow 
+			
+		-> Docker 
+		
+		-> Kubernetes 
+		
+		-> GitHub-Actions - CICD 
+		
+		
+	
+		
+	- Git Rebase :::
+	
+		--> It is used to maintain the Linear Commit History on the Target Branch 
+		--> It is used to keep the current branch in-sync with the target branch 
+		--> It is used to maintain the integrity of target branch / Prevent Merge Conflict in Target Branch
+		--> As a best practice, it is always recommended to use git rebase before merge!	
+
+
+
+		-> Repo
+			
+			master : cm1,cm2,cm3
+			
+						cm1,cm2,cm3,f1cm1,f1cm2,f1cm3							# Upon Merging feature_branch1
+						
+						cm1,cm2,cm3,f2cm1,f2cm2,f2cm3,f1cm1,f1cm2,f1cm3			# Upon Merging feature_branch2						
+						
+						cm1,cm2,cm3,f1cm1,f1cm2,f2cm1,f1cm3,f2cm2,f2cm3			# Expected Commit History - Upon Merging feature_branch2 with proper rebase
+						
+		
+				feature_branch1 : cm1,cm2,cm3
+				
+						feature_branch1 : cm1,cm2,cm3,f1cm1,f1cm2,f1cm3
+						
+							
+							git rebase master
+													
+							git switch master
+							
+							git merge feature_branch1
+						
+						
+		
+				feature_branch2 : cm1,cm2,cm3		
+				
+						feature_branch2 : cm1,cm2,cm3,f2cm1,f2cm2,f2cm3
+						
+							git rebase master
+							
+							feature_branch2 : cm1,cm2,cm3,f1cm1,f1cm2,f1cm3,f2cm1,f2cm2,f2cm3							
+		
+							git switch master
+							
+							git merge feature_branch2	
+							
+	
+	- Git Squash Option :::
+	
+	
+		-->	It is used to combine more than one commits into single commit point during merge.
+		
+			- Syn: git merge --squash master 
+			
+			
+		-> Repo:
+			
+			master : cm1,cm2,cm3
+			
+						cm1,cm2,cm3,f1cm1,f1cm2,f1cm3,.........................................,f1cm250					# Upon merging feature_branch1
+			
+				feature_branch1 : cm1,cm2,cm3
+				
+						feature_branch1 : cm1,cm2,cm3,f1cm1,f1cm2,f1cm3,.........................................,f1cm250	
+			
+							git rebase master
+													
+							git switch master
+							
+							git merge --squash feature_branch1
+							
+							git commit -m "Combined commits"
+
+								
+		
+		
+	- Git Cherry-pick ::::
+
+		- It is used to merge the specific commit(s) to the Target Branch
+		
+		
+			- git Cherry-pick <Commit_id1> <Commit_id2> 
+		
+			
+		
+	
+	- Git Stash :::
+	
+		- It is used save the uncommitted changes to the temporary area of the git repository.
+		
+		- It is List Data Structure :::	
+		
+		
+			- git stash list 							# To List the stash list entries 			
+				
+			- git stash save "Message"					# To Save/Create an entry in the Stash List 			
+			
+			- git stash apply 							# To Apply the latest entry back to the staging area 
+		
+			- git stash apply stash@{2}					# To Apply a specific entry back to the staging area 
+		
+			- git stash drop 							# To Delete/Drop the latest entry from the Stash List 
+			
+			- git stash drop stash@{2}					# To Delete/Drop a specific entry from the Stash List
+			
+			- git stash pop								# To Apply the latest entry back to the staging area and Delete that last entry from the Stash List 
+		
+			- git stash pop stash@{2}					# To Apply a specific entry back to the staging area and Delete that specific entry from the Stash List
+			
+			- git stash clear 							# To Clean-up the Stash List.
+		
+	
+	- Working Remote Repositories :::		
+	
+		
+		Local_Machine																							Remote Server 
+		(Git_Client)																							(GitHub)
+		
+			Working Directory 	---------------->	Staging Area  --------------->	Local Repository	--------> 	Remote Repository
+				index.html			git add 		 index.html		git commit 			index.html_v1.0	  git push  	index.html_v1.0
+				index.html			git add 		 index.html		git commit 			index.html_v2.0	  git push  	index.html_v2.0
+				index.html			git add 		 index.html		git commit 			index.html_v3.0	  git push  	index.html_v3.0			
+				index.html			git add 		 index.html		git commit 			index.html_v4.0	  git push  	index.html_v4.0			
+		
+
+	
+	- Developer's Workload :::
+	
+		- Enhancement/Bugfix Project :::
+		
+		
+	- Working with GitHub Repositories ::::
+	
+	
+		- Create Remote GitHub Repositories
+		
+		- Work with Remote Branches 
+		
+		- Pull Request to MErge the Changes 
+		
+		- Git Fetch / Pull 
+		
+		- Keep the Local Repo in-sync with Remote Repository 
+		
+		
+		
+	- ML Project Repository ::::
+	
+	
+				- git init 			# To initialize Local Git Repository				
+			
+				- git add			# To Add the changes from Working Directory to Staging Area 
+
+				- git commit 		# To Commit the Changes from Staging Area to Local Repository
+				
+				- git push 			# To Push the changes from Local Repository to Remote Repository
+				
+				- git clone 		# To Copy/Clone the Entire Remote Repository to Local Machine
+				
+				
+					GitHub Repository URL :
+					
+					
+						- git clone <repo_url>
+						
+						- git clone https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+					
+				
+				- git Fetch/Pull :::
+		
+					-> Both Git fetch and pull are used handle the incremental changes from remote repository.
+					
+					Git Fetch :
+					
+						- It is used to just check for the incremental changes from remote repository, if any incremental changes exist, it will update the details of the changes only in local repository. Git fetch will never Update the Working Directory.
+						
+						- Do explicit merge to update the Working Directory					
+						
+				
+					git Pull :
+					
+						- It is used to check for the incremental changes from remote repository, if any incremental changes exist, it will update the details of the changes in local repository as well as in the Working Directory.	
+
+						- Git Pull is used to Keep the Local Repository In-Sync with Remote Repository
+						
+						
+						- git pull ==> git fetch + git merge 
+		
+		
+				- Fork 				# Is used to Copy one Remote Repository to Another Remote Repository
+
+				- git init 			# To initialize New Local Git Repository
+									# Create .git Directory
+									# Create a default branch - main/master Branch
+										
+	
+	
+		
+		- git remote -v 			# To get the list of Remote Repositories linked with the Local Repository
+		
+		
+		- git remote remove origin 
+		
+
+		- git remote add github-origin https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+		
+		- git remote add az-origin https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+
+
+		
+		- git push -u origin localfeature1
+		
+		
+		
+			- GITHUB UserID 
+			
+			- GITHUB Access Token - PAT			
+	
+  501  cd skillfyme_3008/
+  502  ls
+  503  clear
+  504  ls
+  505  ls
+  506  mkdir testrepo1
+  507  cd testrepo1/
+  508  clear
+  509  git init
+  510  echo "rec1" >> q1.txt
+  511  git add .
+  512  git commit -m "cm1"
+  513  echo "rec1" >> q2.txt
+  514  git add .
+  515  git commit -m "cm2"
+  516  echo "rec1" >> q3.txt
+  517  git add .
+  518  git commit -m "cm3"
+  519  clear
+  520  ls
+  521  git log --oneline
+  522  gti status
+  523  git status
+  524  git branch feature1
+  525  git branch feature2
+  526  git branch
+  527  git log --oneline
+  528  git switch feature1
+  529  ls
+  530  git log --oneline
+  531  echo "rec1" >> a1.txt
+  532  git add .
+  533  git commit -m "f1cm1"
+  534  echo "rec1" >> a2.txt
+  535  git add .
+  536  git commit -m "f1cm2"
+  537  echo "rec1" >> a3.txt
+  538  git add .
+  539  git commit -m "f1cm3"
+  540  git log --oneline
+  541  ls
+  542  git rebase master
+  543  git switch master
+  544  ls
+  545  git log --oneline
+  546  git merge feature1
+  547  git log --oneline
+  548  ls
+  549  git switch feature2
+  550  git log --oneline
+  551  ls
+  552  echo "rec1" >> k1.txt
+  553  git add .
+  554  git commit -m "f2cm1"
+  555  echo "rec1" >> k2.txt
+  556  git add .
+  557  git commit -m "f2cm2"
+  558  echo "rec1" >> k3.txt
+  559  git add .
+  560  git commit -m "f2cm3"
+  561  echo "rec1" >> k4.txt
+  562  git add .
+  563  git commit -m "f2cm4"
+  564  git log --oneline
+  565  git rebase master
+  566  git log --oneline
+  567  git switch master
+  568  git merge feature2
+  569  clear
+  570  ls
+  571  git log --oneline
+  572  git switch feature1
+  573  git log -oneline
+  574  git log --oneline
+  575  git rebase master
+  576  git log --oneline
+  577  clear
+  578  ls
+  579  git log --oneline
+  580  git status
+  581  echo "rec1" >> d1.txt
+  582  git add .
+  583  git commit -m "f1cm1"
+  584  echo "rec1" >> d2.txt
+  585  git add .
+  586  git commit -m "f1cm2"
+  587  echo "rec1" >> d3.txt
+  588  git add .
+  589  git commit -m "f1cm3"
+  590  echo "rec1" >> d4.txt
+  591  git add .
+  592  git commit -m "f1cm4"
+  593  echo "rec1" >> d5.txt
+  594  git add .
+  595  git commit -m "f1cm5"
+  596  git log --oneline
+  597  git rebase master
+  598  git switch master
+  599  ls
+  600  git log --oneline
+  601  git merge --squash feature1
+  602  git status
+  603  git commit -m "Combined Feature1_Changes"
+  604  ls
+  605  git log --oneline
+  606  git show 7ce1d3f
+  607  ls
+  608  git status
+  609  git log --oneline
+  610  git switch -c feature3
+  611  git log --oneline
+  612  echo "rec1" >> w1.txt
+  613  git add .
+  614  echo "rec2" >> w1.txt
+  615  git add .
+  616  git status
+  617  ls
+  618  git switch master
+  619  ls
+  620  git status
+  621  git log --oneline
+  622  git switch feature3
+  623  git status
+  624  git stash list
+  625  git stash save "created for w1.txt"
+  626  git status
+  627  ls
+  628  git switch master
+  629  ls
+  630  git stash list
+  631  git switch feature3
+  632  git status
+  633  echo "rec1" >> w2.txt
+  634  git add .
+  635  git stash save "Created for w2.txt"
+  636  git stash list
+  637  echo "rec1" >> w3.txt
+  638  git add .
+  639  git stash save "Created for w3.txt"
+  640  echo "rec1" >> w4.txt
+  641  git add .
+  642  git stash save "Created for w4.txt"
+  643  echo "rec1" >> w5.txt
+  644  git add .
+  645  git stash save "Created for w5.txt"
+  646  git stash list
+  647  ls
+  648  git stash apply
+  649  git stash list
+  650  git commit -m "Created w5.txt"
+  651  git status
+  652  ls
+  653  git stash drop
+  654  git stash list
+  655  git stash pop
+  656  git status
+  657  git stash list
+  658  git stash save "for w4.txt"
+  659  git stash list
+  660  git stash apply stash@{2}
+  661  git commit -m "w2.txt"
+  662  git status
+  663  ls
+  664  git stash list
+  665  git stash drop stash@{2}
+  666  git stash list
+  667  git stash pop stash@{2}
+  668  git stash list
+  669  git stash clear
+  670  git stash list
+  671  clear
+  672  cd ..
+  673  clear
+  674  mkdir remoterepos
+  675  cd remoterepos/
+  676  clear
+  677  ls
+  678  pwd
+  679  ls
+  680  git clone https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+  681  ls
+  682  cd Remote_Repo1/
+  683  ls
+  684  ls -a
+  685  git branch
+  686  git switch -c localfeature1
+  687  ls
+  688  git log --oneline
+  689  git remote -v
+  690  echo "REC1" >> Local_File1
+  691  git add .
+  692  git commit -m "Created Local_File1"
+  693  git log --oneline
+  694  git push -u origin localfeature1
+  695  git switch main
+  696  git status
+  697  ls
+  698  git log --oneline
+  699  ls
+  700  git fetch
+  701  git status
+  702  ls
+  703  git pull
+  704  ls
+  705  git status
+  706  git log --oneline
+  707  git pull
+  708  ls
+  709  git status
+  710  git remote -v
+  711  git remote remote origin
+  712  git remote remove origin
+  713  git remote -v
+  714  git remote add origin https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+  715  git remote -v
+  716  git remote add az-origin https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+  717  git remote -v
+  718  git push -u az-origin
+  719  cd ..
+  720  clear
+  721  history
+	
+
+Next:::
+
+	- Working with ML Dateset using DVC 
+
+	- ML Workflow --> 
+	
+		- s3 
+		
+		- mlflow 
