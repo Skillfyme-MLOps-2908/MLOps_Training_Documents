@@ -1888,3 +1888,277 @@ Next:::
 		- s3 
 		
 		- mlflow 
+
+
+
+		
+#######################
+Day 6 | 13th Sep. 2026
+#######################	
+
+
+	MLOps Tools :::
+	
+		AWS :::
+		
+			- Create AWS Account - Free Tier Account
+			
+				As a root user -->	 
+				
+					
+			
+			- IAM Service --> Create IAM User - IAM Roles
+			
+				- Identify and Access Management Service :::
+					
+					- Authentication 
+						==>	Who can access ?
+						
+					- Authorization
+						==> What sort of action be perform 
+						
+						
+				- RBAC - Role Based Access Control 
+				
+				
+				- Create IAM User ==> Admin Access --> Group Level Access
+				
+				- IAM Policy - Defines Permissions
+				
+				- IAM Role --> 
+				
+
+		To Do :::
+		
+			- AWS Console :::
+
+				- root user ID 
+				
+				- Password 
+				
+				- MFA 
+
+					- Login to AWS Console as a root user 
+					
+					- Create IAM User user profile with Admin Access
+					
+					
+					https://682033467551.signin.aws.amazon.com/console
+
+					skmlopsuser1
+					
+					
+					SkIAMRole1
+
+			
+					
+			- S3 Service --> S3 Buckets -> Datasets & Model Artifacts
+			
+			
+				-> Create S3 Bucket 		skmlopss3bkt1
+				
+			- AWS S3 Buckets -> To manage the ML Datasets 
+		
+	S3 Buckets :::
+	
+	
+		--> Bucket = Directory
+		
+			--> Files -> Keys/ Objects
+			
+		--> Access to Create a S3 Bucket 	
+		
+		--> Create s3 Bucket 		--> skmlopss3bkt1
+
+		Set S3 Bucket Policy :
+				
+		{
+		  "Version": "2012-10-17",
+		  "Statement": [
+			{
+			  "Sid": "Statement1",
+			  "Effect": "Allow",
+			  "Principal": "*",
+			  "Action": [
+				"s3:*"
+			  ],
+			  "Resource": "arn:aws:s3:::skmlopss3bkt1/*"
+			}
+		  ]
+		}						
+			
+			
+		
+		- EC2 Service --> Create EC2 Instance -> Dev / Build / Target Environment 
+			
+
+		- Working with EC2 Service to Launch EC2 Instances ::::
+		
+		
+		
+		Access Remote Server :::		
+		
+			Using SSH Connection:
+			
+				-> Host_Name 			# Public IP Address of VM
+				
+				-> User_Name			# ubuntu
+				
+				-> Access_Key 			- Private Key
+				
+				
+					- EC2 Direct Connection	# Thru Browser 
+					
+					
+					
+					- SSH Agent 		# Windows User
+						
+						- Putty					
+						- MobaXterm 	# On Windows Machine 
+										# https://mobaxterm.mobatek.net/download.html
+											- Choose Home Edition
+												- Installer Edition 
+			
+			
+					- Terminal 			# Mac & WIndows Users			
+			
+				- Install DVC, Python, MLFlow, Docker & Kubernetes
+				
+
+	1. ML Project Repository 		# https://github.com/Skillfyme-MLOps-2908/mlops-core-project
+	
+	
+# Create data/raw/review.csv 
+
+
+review_text,sentiment
+I love this product it works perfectly,positive
+Absolutely fantastic quality and service,positive
+Very happy with the purchase,positive
+Great experience would buy again,positive
+Excellent product highly recommended,positive
+Amazing performance and value,positive
+Satisfied with quality and delivery,positive
+Works exactly as advertised,positive
+Customer support was very helpful,positive
+This is the best purchase I have made,positive
+
+This product is okay not great not bad,neutral
+Average quality nothing special,neutral
+It works but has some issues,neutral
+Neither good nor bad experience,neutral
+Product meets basic expectations,neutral
+Decent but could be improved,neutral
+Acceptable quality for the price,neutral
+Nothing impressive but usable,neutral
+Fine for occasional use,neutral
+Okayish experience overall,neutral
+
+Worst product I have ever bought,negative
+Very disappointed with the quality,negative
+Terrible experience waste of money,negative
+Does not work as expected at all,negative
+Extremely poor build quality,negative
+Bad experience will not recommend,negative
+Product stopped working in two days,negative
+Customer service was terrible,negative
+Totally useless and overpriced,negative
+Highly dissatisfied with this product,negative
+
+I am happy with the fast delivery,positive
+Packaging was good and product works well,positive
+Average packaging but product is decent,neutral
+Late delivery and damaged box,negative
+The item arrived broken,negative
+Very smooth and reliable performance,positive
+Not worth the price paid,negative
+Okay product but slow response,neutral
+Loved the design and usability,positive
+Disappointed with the overall experience,negative	
+
+
+
+
+
+	2. Clone on Build Server 
+	
+	3. Perform Build 				(VM1)
+	
+		-> Use DVC Pipeline
+		
+			- Validate Dataset 
+			
+			- Process Dataset 
+			
+			- Train the Model 
+			
+			- Verify the Accuracy of the Model using MLFlow 
+			
+			- Update the Model Artifacts to s3 Bucket 
+			
+		-> Use Docker 
+		
+			- Create ML Application Images 
+			
+				- UI 
+				
+				- API 
+
+
+
+	DVC ::::	Data Version Control::		# https://dvc.org/  # https://doc.dvc.org/start
+	
+		==> Maintain the Version of ML Datasets.	
+
+
+		--> Install DVC ???
+		
+			- Prepare Virtual Enviroment 
+			
+				-> Install dvc/mlflow/streamlit/fast-api
+	
+	
+	Launch EC2 Instance ::: 
+	
+		- Ubuntu AMI 22.04v with IAM Role(Access s3) -> 
+
+		- Connect to EC2 Instance
+				
+				- Install :	AWS CLI, Docker Cli, git
+				
+				- Install : Python3, Python3 environment pkg
+
+
+# To Setup AWS CLI ::::				https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+
+sudo apt install -y unzip curl
+
+Download AWS CLI v2
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+Unzip installer
+
+unzip awscliv2.zip
+
+Install AWS CLI
+
+sudo ./aws/install
+
+Verify Installation
+aws --version
+
+
+Expected output:
+
+aws-cli/2.x.x Python/3.x Linux/x86_64
+
+
+AWS CLI installed successfully
+
+
+
+Create Python Enviroment::::
+
+	
