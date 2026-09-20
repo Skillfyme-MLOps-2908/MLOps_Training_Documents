@@ -2161,4 +2161,334 @@ AWS CLI installed successfully
 
 Create Python Enviroment::::
 
+#######################
+Day 7 | 20th Sep. 2026
+#######################	
+
+	Package ML Model ::::
+	
+		- Docker 		
+		
+		- Kubernetes 	- Open-Source 
+		
+			--> Container orchestration Tool ::
+			
+				- Micro-Services
+				
+				- ML Project 
+
+
+		- Package Application 
+		
+	Deployment :
+		
+		- What is Deployment ?	
+		
+		- Frequency of Deployment ?
+		
+			- Frequency of Deployment of ML Model ==> 
+			
+				1. Input Data Change 
+				
+				2. Change in the Algorithm
+	
+	
+	MLOps Workflow :
+	
+	
+		- DVC Pipeline 
+		
+		- ML Model CICD Pipeline 	--> Github-Actions 
+		
+		- Kubeflow ==> MLOPs 		
+
+
+
+	- ML Model :
+	
+		1. Model APIs 	(Backend service)	--> Fast-API Service 
+
+		2. UI 								--> Streamlit Tool 
+		
+		
+	- Architecture of ML Model is based on Micro-Services.
+	
+	
+		- Packaged using Container Service and Deployed using Kubernetes Service.
+		
+	
+	- Package ML Model : Container Service - Docker.
+	
+	
+	Docker :::
+	
+		- Containerization :::
+		
+			- It is a process of packaging the Application along with its' dependencies.
+		
+			
+	- Virtual Machines :::
+		
+		-> VMs are Hardware Level Virtualization 
+		-> VMs are created using Hypervisor
+		-> VMs are used to execute the Operating System. Not Application/Task
+		-> VMs will be up and running even if there is no active Application/Task
+		-> VMs consume more space and time to start the Application/Task
+	
+	
+	- Containers :::
+	
+		-> Containers are called as OS Level Virtualization 
+		-> Containers are created using Container Engine 
+		-> Containers are used to execute the Application/Task. Not Operating System
+		-> Containers will immediately goes to exit state if there is no active Application/Task
+		-> Containers consume less space and time to start the Application/Task 
+		
+			- Namespace & Control Groups --> Kernel(Core of OS)
+		
+		
+	- Setup the Container Engine :
+	
+	
+	- Use Cases :::
+	
+		- Infra-Structure Perspectives:
+		
+			-> AMI --> Server Template 
+			
+			-> ML Project: To Test ML Project ==> 150 VMs 
+			
+				Create Virtual Machine 
+				
+					- Install Container Engine 
+					
+						-> C1,2,3,4,5,6,7,8,9,................,150
+				
+					- Save Infra-Structure Cost, by reducing the no. of VMs.
+		
+		
+		- Deployment Perspectives:
+		
+			-> ML Engineers/Data Engineers :
+			
+			
+				Containerize the Model and Deploy to Target Enviroments:
+				
+					- It is a process of packaging the Application along with its' dependencies.	
+
+
+						*.pkl 
+						
+						
+						Package the artifacts along with its dependencies 
+						
+						
+						- Container Image(Package)
+						
+							Create Container Image(Application,dependencies) --> my_mdl:v1.0
+							
+							
+						- Publish the Container to Container Registry(DockerHub)
+						
+						
+						- Deploy the Container Images to the Target Enviroments using Kubernetes
+						
+					-> Test --> Pull my_mdl:v1.0 Image from DockerHub and Execute as Container
+					
+					-> Prod --> Pull my_mdl:v1.0 Image from DockerHub and Execute as Container	
+
+
+	- Setup the Container Engine :::
+	
+		- Create DockerHub :::
+		
+		- Install Docker Engine on Build Environment :::
+		
+		
+		Terminologies ::
+		
+			- Container Engine: 	- It is a Tool to Manage the Container Images and Containers
+									- Eg.: Docker Container Engine.
+									
+			- Image					- Is a static file,which defines the properties of the application to create container
+									- Non-Executable 
+									- Images are create using the Dockerfile Instructions based of incremental layers.
+			
+			- Container				- Executable units of Container image.
+			
+			- Container Registry	- Used to maintain/version control the container images
+									- DockerHub 
+									
+									
+						Eg.: github 	- To Version Control Source Codes 
+							 dockerhub 	- To Version Control container images
+							 
+			- Container Repository	- Sub-set of Container Registry
+									- Can be created based on App Teams/Enviroments 
+									
+	
+		Work with Docker :::
+		
+			- Launch EC2 Instance - Linux Ubuntu 24.04 version .
+			
+			- Login to EC2 Instance 
+			
+			- Install docker 
+			
+				- sudo -i 
+				- apt install docker.io	-y		# https://docs.docker.com/engine/install/ubuntu/
+				
+			- Use Docker CLI Commands to interact with Docker Engine to create/Manage the containers/Images.
+			 
+	- Work with Docker Cli Commands 
+	
+		--> Use Existing Image from DockerHub
+	
+			docker images 			# To get the list of images on the local machine
+
+			docker ps 				# To get the list of active containers on the local machine	
+
+			docker ps -a 			# To get the list of active & inactive containers on the local machine	
+			
+			
+			docker pull ubuntu 		# Download an Container Image from Docker Hub
+			
+				- Syntax: 	docker pull <image>:<tag/version_ID>
+							docker pull <image>							# Always refer to the latest version
+	
+	
+			docker run <image_name>	# To Create a New Container based on the Image Name.
+									# Run/Execute the Container
+			
+			
+			Modes of Execution :::
+
+				- Attached Mode / Foreground Mode 		# Default
+				
+					Eg.: docker run ubuntu sleep 5
+				
+				- Detached Mode / Background Mode 
+				
+					Eg.: docker run -d ubuntu sleep 5
+				
+				- Interactive Mode :::
+				
+					Eg.: docker run -it ubuntu bash
+				
+		
+			docker start <container_id>		# Start the Container 
+			
+			Login to running Container :
+			
+				- docker exec -it <container_id> bash 	# To Login to running container
+			
+				- exit 									# To Logoff from the running container 
+
+			docker stop <container_id>		# Stop the running Container 
+			
+		
+		Working with Web Servers with-in Docker Container.
+		
+		Docker Networking :
+		
+		Port Mapping / Port Binding :::		# To expose the container application to internet
+		
+		
+			Syntax : -p <host_port>:<container_port>
+			
+			Eg.: 
+				docker run -it -p 8080:8080 tomcat:8.0
+			
+				docker run -it -p 8089:8080 tomcat:8.0
+			
+			
+		Access the Container application using the <External_IP/Public_IP>:<host_port>
+		
+	
+		Remove Container :
+		
+			docker rm <container_id>
+		
+		Remove Image :
+		
+			docker rmi <image_id>
+			
+	
+	--> Create New Images ::::
+		
+		- Docker Commit ::	# Infra-Structure perspective
+		
+			- It used to create a new Container Image based on the existing Container reference
+			
+			Syntax: 
+			
+				docker commit <container_id> <DockerHub_Repository_Name>/<New_Container_Image>:<tag/version_ID>
+			Eg.: 
+				
+				docker commit 922ee3d65714 loksaieta/tempimg:v1.0
+				
+		
+		
+		
+		
+		- Docker Build ::	# Development/Deployment Process 
+		
+			- It used to create a new Container Image based on the Dockerfile reference
+			- Dockerfile composed of Dockerfile Instructions 
+		
+		
+			
+		vi Dockerfile 
+		
+		FROM ubuntu
+		RUN apt update -y 
+		RUN apt install git -y 
+		
+			- 
+
+			Syntax: 
+			
+				docker build -t <DockerHub_Repository_Name>/<New_Container_Image>:<tag/version_ID> .		# '.' denotes Dockerfile reference
+			Eg.: 
+				
+				docker build -t loksaieta/dummyimg .			
+			
+									
+		
+		- Publish the Container to Container Registry(DockerHub) :::
+			
+			- Login to Container Registry using Docker CLI Commands 
+			
+				- DockerHUB Login_ID
+				
+					docker login -u loksaieta
+				
+				- PAT - (Password)
+				
+					kjlkjlkjlklk
+					
+					
+					
+			- Push the Container Image to DockerHub :
+			
+				docker push <DockerHub_Repository_Name>/<New_Container_Image>:<tag/version_ID>
+		
+				Eg.: 
+				
+					docker push loksaieta/tempimg:v1.0
+		
+Next:
+
+	MLOPs Workflow :::
+	
+					
+		- Dev: With the Project Source Code 		- DVC, MLFLOW, Test Application - Fast-API, Streamlit web ui.
+			
+		
+		- Build: using Docker 
+		
+		- Deployment: Using Kubernetes
+									
+		
+			
 	
