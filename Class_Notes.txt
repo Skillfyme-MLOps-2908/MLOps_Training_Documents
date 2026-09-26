@@ -2490,5 +2490,321 @@ Next:
 		- Deployment: Using Kubernetes
 									
 		
+
+		
+			
+#######################
+Day 8 | 26th Sep. 2026
+#######################	
+	
+	MLOPs Workflow :::
+	
+		- Dev: With the Project Source Code 		- DVC, MLFLOW, Test Application - Fast-API, Streamlit web ui.			
+		
+		- Build: using Docker 
+		
+		- Deployment: Using Kubernetes	
+
+
+	Phase 1:
+	
+	1. DVC is used to manage the Input Dataset for Model Training 
+	
+	2. dvc repro 		# Reproduce  ==> Train the Model # Trigger DVC Pipeline --> Data Validation - Process Data - Train 
+						# dvc.yaml
+						# dvc repro command is used to execute dvc pipeline
+
+	3. Trained Model ==> ML Artifacts ==> model.joblib / pickle 
+	
+	4. Used DVC to maintain the Artifacts - S3 
+
+
+	Phase 2:
+	
+	5. Use that artifacts and dependencies to create Dockerfile and create Docker Image 
+	
+	6. Publish Docker Image to Container Registry
+	
+	7. Deploy to Kubernetes 
+	
+	
+	Phase 3:
+	
+	8. Automate Build and Deployment to Kubernetes using github-actions workflow--> CI/CD Pipeline
+	
+	9. Monitor using Kubeflow(Deployment & Monitor) MLFlow / Prometheus / Grafana 
+	
+	
+
+
+Working with DVC ::::
+
+	--> EC2 Service				# Create Virtual Machines(Dev,Build,Test,Production Environments)	:::	
+
+			--> EC2 Instance	# To Setup Build Environment 
+								# Create an EC2 Instance with IAM Role attached.
+								# Setup Security Group - Inbound Rules. 
+								# Setup MobaXTerm/Putty on Local Machine to access s3 bucket and EC2 Instances 												
+			--> Access EC2 Instance :
+
+								- Using MobaXTerm/Putty (Windows User)
+								- Use Terminal 			(Windows/Mac/Linix User)
+								
+								
+
+	--> Install MLOps related tools :::
+
+			git 
+			docker 
+			python 
+			create virtual environment using python 
+				- DVC  
+				- Streamlit						# Tool To creat UI for for ML Model 
+				- Fast-API 						# Tool To creat API for for ML Model 
+			
+
+			# install git,python,docker	on VM Level 
+			
+				sudo apt install -y \
+					  python3.12 python3.12-venv python3-pip
+
+				Create Virtual Environment ::::
+				
+						python3.12 -m venv loksai-venv
+
+						source loksai-venv/bin/activate
+
+					  
+				sudo apt install docker.io -y
+				
+				
+	- Environment:
+	
+		Dev 			--> 	Owned by the Developers 
+		
+								- Create ML Model Web Interface using Streamlit 
+								
+								- Create ML Model API using Fast-API
+			
+		
+		Build 			--> 	Owned by the DevOps/MLOps Team 
+		
+		Target Environments :
+		
+			- Test 				# Deploy the Package(Docker Image) & Execute 	
+		
+			- Prod 
+
+
+	- Core components of ML Project:
+	
+		- API 										# Backend - fast-api
+		
+		- UI 										# Web UI - streamlit
+		
+		- SRC -> Data_validation, Pre-Processing, Training
+	
+		- dvc .yaml
+		
+		- docker ***
+		
+		- K8s ***
+		
+		- github-workflow ****
+		
+		- requirement.txt
+		
+		
+	- DockerHub Account: https://hub.docker.com/
+	
+Working with MLOps - Build Enviroment:
+
+	- Launch an EC2 Instance - Ubuntu AMI v24.04 (++ IAM Role, 30GB)
+	
+	- Update the Security Group - Allow all/required ports.
+	
+
+				--> Login to EC2 Instance :
+				
+					$ sudo -i 
+					
+					$ apt update -y
+					
+					
+					# Setup AWS Cli on the EC2 Instance 		# Used to access S3 Bucket 
+						
+
+						# To Setup AWS CLI ::::
+
+
+						sudo apt install -y unzip curl
+
+						#Download AWS CLI v2
+						curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+						#Unzip installer
+						unzip awscliv2.zip
+
+						#Install AWS CLI
+						sudo ./aws/install
+
+						#Verify Installation
+						aws --version
+
+					$ aws s3 ls 					# Get the list of s3 bucket - to quickly check for s3 access from EC2 Instance.
+
+
+						
+					# install git,python,docker	on VM Level 
+					
+						sudo apt install -y \
+							  python3.12 python3.12-venv python3-pip
+							  
+					# sudo apt install docker.io -y
+
+
+Build Server :::
+
+- Create Python Virtual Environment to work with MLOps Tools
+
+python3.12 -m venv loksai_env
+
+source loksai_env/bin/activate
+		
+<Download project to build environment>			# Git clone 
+
+cd <project_Folder>
+
+mkdir data 
+cd data 
+mkdir processed 
+mkdir raw
+
+cd ..
+
+mkdir models 
+
+# install dvc Package within the Venv.
+
+pip install dvc_s3									# Install DVC-s3 
+
+dvc --version
+
+pip install -r requirements.txt
+			
+git init 							# Not required if you already cloned the Repo.
+
+dvc init 							# Initialize DVC Repo & Create *dvcignore,config files add to git staging area
+
+dvc remote add -d myremote s3://loksai-edu-mlproject1
+
+git add .dvc/config
+
+git commit -m "Configure DVC S3 remote"
+
+	
+vi data/raw/reviews.csv				# Add sample Records as shown below						# Experiment Iteration can Start from here!	
+
+dvc add data/raw/reviews.csv		# Add data/raw/reviews.csv to git after every dvc add
+
+git add data/raw/reviews.csv.dvc data/raw/.gitignore
+
+git commit -m "Added DVC Data-v1"
+
+dvc repro							# To Execute DVC Pipeline
+
+git add data/processed/.gitignore models/.gitignore dvc.lock			# Add dvc.lock to git after every dvc repro
+
+git commit -m "repro-Processed data-v1"
+
+dvc push 							# Push repro-Processed data 
+
+dvc status							# Status should be: Data and pipelines are up to date.
+
+dvc pull							# Pull the latest changes from Remote S3 Bucket
+			
+
+
+Experimentation ::::
+
+Start MLflow UI (ONLY correct command)
+mlflow ui --host 0.0.0.0 --port 5000 --allowed-hosts '*'
+
+Open in browser
+http://<EC2_PUBLIC_IP>:5000
+
+13.234.59.99:5000
+
+
+### OPTIONAL: MODEL VALIDATION
+Run API locally
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+Open in browser
+http://<EC2_PUBLIC_IP>:8000
+
+13.234.59.99:8000
+http://13.234.59.99:8000/docs
+
+### Run Streamlit
+streamlit run ui/app.py --server.address 0.0.0.0			### Confirm predictions change with new data.
+
+Open in browser
+http://<EC2_PUBLIC_IP>:8501
+
+13.234.59.99:8501
+
+#************************************************************************************************************
+
+# Create data/raw/review.csv 
+
+
+review_text,sentiment
+I love this product it works perfectly,positive
+Absolutely fantastic quality and service,positive
+Very happy with the purchase,positive
+Great experience would buy again,positive
+Excellent product highly recommended,positive
+Amazing performance and value,positive
+Satisfied with quality and delivery,positive
+Works exactly as advertised,positive
+Customer support was very helpful,positive
+This is the best purchase I have made,positive
+
+This product is okay not great not bad,neutral
+Average quality nothing special,neutral
+It works but has some issues,neutral
+Neither good nor bad experience,neutral
+Product meets basic expectations,neutral
+Decent but could be improved,neutral
+Acceptable quality for the price,neutral
+Nothing impressive but usable,neutral
+Fine for occasional use,neutral
+Okayish experience overall,neutral
+
+Worst product I have ever bought,negative
+Very disappointed with the quality,negative
+Terrible experience waste of money,negative
+Does not work as expected at all,negative
+Extremely poor build quality,negative
+Bad experience will not recommend,negative
+Product stopped working in two days,negative
+Customer service was terrible,negative
+Totally useless and overpriced,negative
+Highly dissatisfied with this product,negative
+
+I am happy with the fast delivery,positive
+Packaging was good and product works well,positive
+Average packaging but product is decent,neutral
+Late delivery and damaged box,negative
+The item arrived broken,negative
+Very smooth and reliable performance,positive
+Not worth the price paid,negative
+Okay product but slow response,neutral
+Loved the design and usability,positive
+Disappointed with the overall experience,negative
+
+
+#***********************************************************************************************************
 			
 	
