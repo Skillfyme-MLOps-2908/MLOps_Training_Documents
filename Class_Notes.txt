@@ -2806,5 +2806,214 @@ Disappointed with the overall experience,negative
 
 
 #***********************************************************************************************************
+
+	
+#######################
+Day 9 | 27th Sep. 2026
+#######################	
+
+	
+
+	- Integrate Docker and Kubernetes
+
+	- Deploy to Kubernetes Cluster	(VMs)
+
+	- Open-Source Kubernetes :::
+		
+	- Intro to Kubernetes ::::
+	
+			- Kubernetes is an open-source Container Orchestration Tool
+			- Kubernetes is used to Deploy any type of Containers.
+			- It is used to ensure high availability of the Applications/services running thru Containers.
+			- Used to Ensure High Availability of Containers by creating Replicas of Containers/Pod.
+			- It supports Auto-Scaling & Load Balancing.
+
+			- Self-healing Capability!
 			
+			- Using this we can achieve Continuous Deployment
+			
+				Service Upgrade/Downgrade can be done without any downtime!
+				
+		Managed Kubernetes Services from Service Provider:
+		
+		
+			- AWS 	===> ECS,ECR,EKS 
+			
+			- Azure	===> ACS,ACR,AKS 
+				
+			- GCP 	===> GCE,GCR,GKE 
+			
+		Enviroments:
+
+			Non-Prod 						==>			Prod Enviroment --> Prod_Server1,2,3,4,5,6
+			
+			
+			
+		
+	- 3-tier Application:
+	
+		- Frond-End Layer			C1.1,1.2,1.3 
+		
+		- Business Layer 			C2.1,2.2,2.3 
+		
+		- Databse Layer				C3.1,3.2,3.3 
+		
+		
+		Docker Container Engine:
+		
+			-> Docker Swarm :::
+			
+				- Docker Swarm is an open-source Container Orchestration Tool
+				- Docker Swarm is used to Deploy only the Docker Containers.
+				- It is used to ensure high availability of the Applications/services running thru Containers.
+				- Used to Ensure High Availability of Containers by creating Replicas of Containers
+				- It Will not supports Auto-Scaling & Load Balancing.
+			
+		
+		Kubernetes Architecture:
+		
+			- Kubernetes_Master 
+			
+				- Kubernetes WorkerNodes: 1,2,3,4,5 
+				
+	- Kubernetes Architecture Components
+	
+		- Kubernetes Architecture components :::
+		
+			API_Server 				--> # Acts as an interface to the kubernetes 
+			
+			ETCD 					--> # Single point of Source for Kubernetes Components 
+			
+			Scheduler				--> # To identify the Healthy Node for Deployments
+			
+			Controller Manager 		--> # To run the pods in its desired state  - 3
+			
+			
+			Kubelet 				--> # Is a Kubernetes Agent used to Create & Deploy the Pods
+			
+			KubeProxy				--> # Is used to enable pod networking by create Pod IP Address			
+			
+			CRI - Container RunTime Interface (Container-D)
+									--> # It is used identify the Image from Container Registry for deployment	
+
+	
+	
+	
+	- Kubernetes Architecture Components
+
+	- Kubernetes Terminologies ::	
+	
+		- Kubernetes Cluster	# Is the collection of Worker nodes.
+		
+		
+			Kubernetes_Master(VM)		# To Create and Schedule the Pods
+			
+				Kubernetes_WorkerNode1	# To execute the Application Pods
+				Kubernetes_WorkerNode2		
+				Kubernetes_WorkerNode3				
+
+		- Pod					# Is an atomic unit of scheduling on Kubernetes
+		
+		- Container Images :	
+			- It is a static file(Non-Executable) that define the application properties, and the dependencies to create container 
+			- It composed of various Layers of Instructions.
+			- It is created using Dockerfile.
+			
+		- Containers		:	
+			- Container are the executable units of the Container Images
+			
+		- Container Registry:
+			- Used to Version Control and Maintain the Container Images 
+			- Using DockerHub 
+			
+			
+		- Kubectl 				# Command Line Utility - To interact with Kubernetes Master. 
+		
+		
+		- Manifest Files 		# Application Configuration File => *.yaml / *.json 
+
+	- Setup Kubernetes ::::
+	
+			Kubernetes_Master(VM)				# To Create and Schedule the Pods
+			
+				Kubernetes_WorkerNode1(VM)		# To execute the Application Pods
+				Kubernetes_WorkerNode2(VM)							
+		
+	- Setup Kubernetes using :::
+
+		- Single_Node Kubernetes Cluster 		# Demo/Learning
+				- Minikube,K3s,KIND
+				
+		- Multi_Node Kubernetes Cluster
+				- kubeadm 						# Production Implementations(*)
+				
+
+		Kubernetes_Master(VM)		# To Create and Schedule the Pods		
+			Kubernetes_WorkerNode1(VM)	# To execute the Application Pods
+			Kubernetes_WorkerNode2(VM)
+			
+	
+		Kubernetes Master and Worker Node Configurations :::
+
+			Installation of Kubernetes using Kubeadm :::	
+			
+					1. Launch 3 VMs on AWS Cloud (Ubuntu v24.04) --> (1 Master Node, 2 WorkerNodes)
+				
+				In all the Nodes(i.e., Master Node and WorkerNodes):
+				
+					2. Allow all traffic for all the nodes - just for this demo
+					3. Change the HostName of all the Nodes
+					4. Disable swap configuration in all the nodes
+					5. Install Docker in all the nodes *** (Optional)
+					6. Install CRI - 'Container-D' in all the nodes
+					7. Install Kubeadm,kubelet,kubectl 
+					8. Enable Kubelet	
+				   
+				Only on Master Node:
+				
+					9. Execute Kubeadm Init Command 		# To initialize Kubernetes Master Node
+					10. Enable user Access to Kubernetes
+					11. Install flannel Network plugins for kubeproxy
+
+				Only on WorkerNodes:		
+				
+					12. Execute Kubeadm Join Command 		# To attach the Worknodes with Kubernetes Master Node.
+					
+					
+					
+	- Working with Kubernetes - Kubectl ::::
+	
+		- 
+	
+NExt Session :::
+		
+	- Kubernetes Concepts 
+	
+		- Pods 
+				
+		- Services 
+		
+			- NodePort 
+			
+			- ClusterIP 
+			
+			- Load Balancer 
+			
+		- Controller Objects 
+		
+			- Replicasets 
+			
+			- Deployment Controller 
+			
+		- Namespaces
+		
+
+	- GitHub :::	MLOPs WorkFlow ::: End Result
+	
+	
+		- GitHub-Actions - CICD 
+		
+			-> Self Hosted Agents 
+			
+			-> GitHub Managed Agents 		
 	
