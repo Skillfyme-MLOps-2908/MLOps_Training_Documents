@@ -3016,4 +3016,230 @@ NExt Session :::
 			-> Self Hosted Agents 
 			
 			-> GitHub Managed Agents 		
+
+
+#######################
+Day 10 | 3rd Oct. 2026
+#######################			
+		
+		
+	- Kubernetes Concepts 
 	
+		- Pods ::
+		
+		
+		kubectl get pods -A -o wide
+		
+		
+		- Create Manifest file : --> Kubernetes Object Definition ::::
+		
+		
+		
+				
+		- Services 
+		
+			- NodePort 	
+	
+	- Namespaces
+
+	- Create Deployment Controller Object :::
+	
+	
+	- Namespaces :
+	
+		- Logical Partitioning of the Kubernetes Cluster
+		- Namespaces are created based on the Enviroment Names, Application Team
+		
+		
+		
+	Non-Prod Enviroments 										Prod Enviroment
+	
+		Kubernetes_Master											Kubernetes_Master			
+			Kubernetes_WorkerNode1,2,3,4,5,6                        	Kubernetes_WorkerNode1,2,3,4,5,6
+				
+			
+		Dev															Namespace: ACTIVE_NS 
+		QA 
+		UAT 														Namespace: PASSIVE_NS
+		
+
+
+	-> 3-Tier Application :
+	
+	
+		-	Frond-End Layer 						--> UI 					==>		pod1.1,1.2,1.3,1.4,1.5 
+		
+
+		
+		-  	Application Layer						--> Business Logic		==> 	pod3.1,3.2,3.3
+		
+		
+
+		-  	Back-End Layer							--> Database 			==> 	pod2.1,2.2,2.3 
+		
+		
+		
+		
+
+	- Replicas of Pods :::	---> Based on the traffic / concurrent users 
+	
+		
+		---> 10 replicas to support 1000 users. 
+		
+					-----> 10000 users in realtime!
+
+
+
+	-> Kubernetes_Cluster:
+	
+	
+		- KWN1	-->
+		
+		- KWN2 	--> 
+		
+	
+	- Kubernetes_Master 
+	
+		Kubernetes_WorkerNode1,2,3,4,5,6,7,8,9,10
+		
+		
+		
+		
+		Non-Prod 								Prod 
+		
+			- Dev 									Prod_Server1,2,3,4,5,6,7(High Availability)
+			- Build 
+			- QA 
+			- UAT 
+			
+
+
+	Pod:	---> Upgrade pod_v1 ===>  pod_v2 	===> Deployment Strategy : Rolling Update Strategy(default)
+	
+		
+	
+		pod_v1			===>		pod_v2
+		
+		pod_v1 			===>		pod_v2
+		
+		pod_v1 			===>		pod_v2
+		
+		
+
+		Deployment Controller Object :::
+		
+			--> It is used to deploy the pods and ensure high availability of pods by creating pod replicas 
+			--> 1. Create Muliple instance/replicas/copies of pods 
+				2. Used to Scale-Up / Scale-Down the Pods 
+				3. Used to Upgrade the application pods 
+				4. Used to Down-grade/roll-back the application pods
+			--> The upgrade/down-grade of application pods can be done without any downtime. 
+			--> To achieve zero-downtime during upgrade/down-grade, By Default, it used Rolling-Update Deployment Strategy.
+				- Supports self-healing.		
+			
+			
+			web_app_image:v1.0		==> 	web_app_image:v1.1
+			
+			pod_1.1:v1.0			==>		pod_1.1:v1.1	
+			pod_1.2:v1.0			==>		pod_1.2:v1.1
+			pod_1.3:v1.0			==>		pod_1.3:v1.0
+				
+				
+		Create Manifest file to work with Deployment Controller Object ::::		
+		
+		Deployment Controller Object creates :
+		
+			- Deployment 
+			- Replicaset
+			- Pod Instances 		
+			
+			Nodes ===> ASG - Collection of Target nodes 	
+
+			Kubectl scale/auto-scale ==> - Pod level 
+			
+			
+
+	- Controller Objects:
+
+		- Replicasets
+		
+		- Deployments
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  labels:
+    app: nginx-deploylbl
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-app
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:stable-otel
+        ports:
+        - containerPort: 80
+
+
+Node Port Service ::::
+
+	--> Expose the pods to internet. ===> Port Mapping/Binding
+
+#k8s/ui-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loksai-ui-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+      - name: ui
+        image: loksaieta/loksai-mlops830ui:latest
+        ports:
+        - containerPort: 8501
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loksai-ui-svc
+spec:
+  type: NodePort
+  selector:
+    app: ui
+  ports:
+  - port: 8501
+    targetPort: 8501
+    nodePort: 30001	
+	
+	
+	loksai-ui-svc    NodePort    10.105.49.206   <none>        8501:30001/TCP   6s
+	
+	
+	  
+Next:::
+		
+	- GitHub :::	MLOPs WorkFlow ::: End Result
+	
+	
+		- GitHub-Actions - CICD 
+		
+			-> Self Hosted Agents 
+			
+			-> GitHub Managed Agents
+			
