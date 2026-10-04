@@ -3243,3 +3243,447 @@ Next:::
 			
 			-> GitHub Managed Agents
 			
+
+		
+		
+#######################
+Day 11 | 4th Oct. 2026
+#######################			
+			
+
+	
+	- GitHub :::	MLOPs WorkFlow ::: End Result
+	
+	
+		- GitHub-Actions - CICD 
+		
+			-> Self Hosted Agents 
+			
+			-> GitHub Managed Agents		
+		
+		
+ML Project development phase:
+
+Build Server :::
+
+- Create Python Virtual Environment to work with MLOps Tools
+
+python3.12 -m venv loksai_env
+
+source loksai_env/bin/activate
+		
+<Download project to build environment>			# Git clone 
+
+cd <project_Folder>
+
+mkdir data 
+cd data 
+mkdir processed 
+mkdir raw
+
+cd ..
+
+mkdir models 
+
+# install dvc Package within the Venv.
+
+pip install dvc_s3									# Install DVC-s3 
+
+dvc --version
+
+pip install -r requirements.txt
+			
+git init 							# Not required if you already cloned the Repo.
+
+dvc init 							# Initialize DVC Repo & Create *dvcignore,config files add to git staging area
+
+dvc remote add -d myremote s3://loksai-edu-mlproject1
+
+git add .dvc/config
+
+git commit -m "Configure DVC S3 remote"
+
+	
+vi data/raw/reviews.csv				# Add sample Records as shown below						# Experiment Iteration can Start from here!	
+
+dvc add data/raw/reviews.csv		# Add data/raw/reviews.csv to git after every dvc add
+
+git add data/raw/reviews.csv.dvc data/raw/.gitignore
+
+git commit -m "Added DVC Data-v1"
+
+dvc repro							# To Execute DVC Pipeline
+
+git add data/processed/.gitignore models/.gitignore dvc.lock			# Add dvc.lock to git after every dvc repro
+
+git commit -m "repro-Processed data-v1"
+
+dvc push 							# Push repro-Processed data 
+
+dvc status							# Status should be: Data and pipelines are up to date.
+
+dvc pull							# Pull the latest changes from Remote S3 Bucket
+
+Experimentation ::::
+
+Start MLflow UI (ONLY correct command)
+mlflow ui --host 0.0.0.0 --port 5000 --allowed-hosts '*'
+
+Open in browser
+http://<EC2_PUBLIC_IP>:5000
+
+13.234.59.99:5000
+
+
+### OPTIONAL: MODEL VALIDATION
+Run API locally
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+Open in browser
+http://<EC2_PUBLIC_IP>:8000
+
+13.234.59.99:8000
+http://13.234.59.99:8000/docs
+
+### Run Streamlit
+streamlit run ui/app.py --server.address 0.0.0.0			### Confirm predictions change with new data.
+
+Open in browser
+http://<EC2_PUBLIC_IP>:8501
+
+13.234.59.99:8501
+		
+		
+		
+git push 	# 		Remote Github Repo :
+
+
+Trigger the github-actions workflow ->
+
+
+Deployment :
+
+GitHb-Actions Workflow :
+
+	Build Job:	
+		Build the Container Image - V1
+		
+		Publish the Image to Container Registry - V1 
+	
+	Deployment Job:	
+		Deployed to Kubernetes Cluster - V1
+
+			- Login to Container Registry using Docker CLI Commands 
+			
+				- DockerHUB Login_ID
+				
+					docker login -u loksaieta
+				
+				- PAT - (Password)
+				
+					sdfasdfasdfasdfasdfsadafsdfa
+					
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  # ============================
+  # JOB 1: Build & Push Images
+  # ============================
+  build:
+    name: Build & Push to DockerHub
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Login to DockerHub
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # Build API image
+    - name: Build API Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830api:latest -f docker/Dockerfile.api .
+
+    # Build UI image
+    - name: Build UI Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830ui:latest -f docker/Dockerfile.ui .
+
+    # Push API image
+    - name: Push API image
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830api:latest
+
+    # Push UI image
+    - name: Push UI image
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830ui:latest
+
+  # =============================
+  # JOB 2: Deploy to Kubernetes
+  # =============================
+  deploy:  
+    name: Deploy to Kubernetes
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup kubectl
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ secrets.KUBECONFIG_DATA }}" > ~/.kube/config
+
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/api-deployment.yaml
+        kubectl apply -f k8s/ui-deployment.yaml
+		
+		
+		
+		
+DockerHub Repo:
+
+docker tag ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830api:${BUILD_NUMBER} loksaieta/loksai-eta-app:latest
+
+	stage_repo
+		- v1
+		- v2
+		- v3
+	
+	
+	prod_repo/latest
+		- latest 
+		
+		
+		
+		
+		kubectl create -f k8s/api-deployment.yaml
+		
+		kubectl apply -f k8s/api-deployment.yaml
+		
+		
+		
+	- Single Node Kubernetes cluster:
+	
+		--> Using Minikube/K3s/KIND 
+		
+https://docs.k3s.io/	
+
+
+
+
+
+
+	
+		
+	Github-Actions :::::
+	
+	Automate the Model Creation and Containerization using CICD Workflow - github-actions workflow.
+	
+	Setup-self-hosted Agent on github
+	
+		- Build_Server 
+		- Deployment Server 
+	
+	Deploy using Kubernetes 
+	
+		1. Launch a Target Server / Kubernetes Cluster & Attach IAM Role for S3.
+		2. Open all the required ports 
+		3. Login and Install the required packages
+				- Docker / K3s/Minikube/Kubeadm 
+
+
+			Use AWS Ubuntu - 22.04V AMI 
+			
+			- sudo -i 
+			
+			- apt update -y  
+			
+			- curl -sfL https://get.k3s.io | sh -
+			
+			- sudo systemctl status k3s
+			
+			- kubectl get nodes 
+
+			
+				- Install unzip utility / curl 
+				
+				- Install aws-cli 
+				
+sudo -i
+
+apt install unzip curl -y
+
+METHOD 1 — Install AWS CLI v2 (Recommended)
+
+AWS CLI v2 is the latest, stable version.
+
+Step 1 — Download the installer
+cd /tmp
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+Step 2 — Unzip
+sudo apt install -y unzip
+unzip awscliv2.zip
+
+Step 3 — Install
+sudo ./aws/install
+
+Step 4 — Verify
+aws --version
+
+
+You should see something like:
+
+aws-cli/2.18.x Python/3.x.x Linux/x86_64
+
+					
+		4. Setup the Credentials:
+			- Create linux user - devopsadminuser
+				- valid Credentials - 
+					 Recommended to have ssh-key - public_Key & Private Keys 
+
+#Add User : 
+
+useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+
+su - devopsadmin
+
+#ssh-keygen
+
+#for Ubuntu ::
+#ssh-keygen -t rsa -b 2048 -m PEM								#ubuntu 20.04
+
+ssh-keygen -t ecdsa -b 521										#ubuntu 22.04 or higher version of ubuntu				
+
+
+ls ~/.ssh 
+
+#You should see following two files:
+
+#id_ecdsa - private key
+#id_ecdsa.pub - public
+
+
+#cat id_rsa.pub > authorized_keys
+
+cat id_ecdsa.pub > authorized_keys
+
+chmod 600 /home/devopsadmin/.ssh/*
+
+					 
+				- Enable user access to kubernetes Master 
+				
+					- Create .kube/config under user's home dir. 
+					- Use this user's kube/config file content as token for Authentication on github runner.
+
+root: visudo 
+					
+devopsadmin ALL=(ALL) NOPASSWD: ALL
+
+save & exit
+
+su - devopsadmin
+
+###################### Based on kubeadm ########################
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+###################### Based on kubeadm ########################
+
+###################### Based on k3s ########################
+
+
+mkdir -p $HOME/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
+sudo chown $USER:$USER $HOME/.kube/config
+
+export KUBECONFIG=$HOME/.kube/config
+echo 'export KUBECONFIG=$HOME/.kube/config' >> ~/.bashrc
+
+###################### Based on k3s ########################
+
+
+kubectl get nodes
+										
+cat /home/devopsadmin/.kube/config 			# create Repository Secret in pipeline
+
+					
+		5. Setup github self-hosted action-runner
+		
+			- Goto the Repo level setting 
+			- Actions -> Runner 
+			- Create Runner based on the OS & follow the instructions. 	
+		
+Download:		# just for reference.
+
+# Create a folder
+$ mkdir actions-runner && cd actions-runner# Download the latest runner package
+$ curl -o actions-runner-linux-x64-2.337.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.337.0/actions-runner-linux-x64-2.337.0.tar.gz# Optional: Validate the hash
+$ echo "70920811a4f8ad4328818682bca5c6469c1c942fab52448868071d0063816613  actions-runner-linux-x64-2.337.0.tar.gz" | shasum -a 256 -c# Extract the installer
+$ tar xzf ./actions-runner-linux-x64-2.337.0.tar.gz
+
+Configure :
+
+# Create the runner and start the configuration experience
+$ ./config.sh --url https://github.com/Skillfyme-MLOps-2908/mlops-core-project --token AO62WFVLFOEU6OB3HLHJRW3KYKHAC# Last step, run it!
+$ ./run.sh
+
+Using your self-hosted runner :
+
+# Use this YAML in your workflow file for each job
+runs-on: self-hosted		
+		
+		
+		
+Next ::::
+
+	Monitoring the Infra-Structure & and the ML Applications deployed on Kubernetes Cluster ::::
+	
+	
+	Continuous Monitoring :
+	
+		- Prometheus & Grafana
+		
+		- MLflow 
+		
+		- Kubeflow Pipeline :
+		
+			- GUI based interface to deploy kubernetes Objects - ML Application
+			
+			
+		- Airflow :
+		
+		
+		===> Non-Containerized workload :
+		
+				--> Airflow(build&Deployment Orchestration) & MLflow(Experimentations)
+				
+		===> Containerized workload :
+		
+				--> Kubeflow(Container Orchestration) & MLflow(Experimentations)				
+		
+			
+		
+		cicd --> Happy path 
+		
+		adhoc job: workflow --> --> desired img, artifact ver
+		
+		
+		
+		
