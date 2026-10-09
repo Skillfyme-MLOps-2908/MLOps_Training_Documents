@@ -1381,3 +1381,2309 @@ Next:
 		- AWS S3 Service 
 
 
+
+		
+#######################
+Day 5 | 12th Sep. 2026
+#######################			
+
+
+	- Git Rebase :::
+	
+	- Git Squash Option :::
+	
+	- Git Stash :::
+	
+	- Working Remote Repositories :::
+	
+	Environments :
+	
+	
+		ML 
+		
+		
+			Dev 	==> 	K8s Dev Namespace 	==> 	Pods 	==> MLflow
+			
+			Test 	==> 	K8s Test Namespace 	==> 	Pods 	==> MLflow
+			
+			Prod 	==> 	K8s Prod Namespace 	==> 	Pods 	==> MLflow
+			
+			
+		Docker & Kubernetes :::
+		
+		
+	ML Project :
+	
+		-> DVC 
+		
+		-> GitHub 
+		
+		-> S3 
+		
+		-> MLFlow
+		
+		-> Streamlit - UI 
+		
+		-> Fast-API 
+		
+		-> Monitoring & Experimentations 
+		
+			-> Prometheus & Grafana & MLflow 
+			
+		-> Docker 
+		
+		-> Kubernetes 
+		
+		-> GitHub-Actions - CICD 
+		
+		
+	
+		
+	- Git Rebase :::
+	
+		--> It is used to maintain the Linear Commit History on the Target Branch 
+		--> It is used to keep the current branch in-sync with the target branch 
+		--> It is used to maintain the integrity of target branch / Prevent Merge Conflict in Target Branch
+		--> As a best practice, it is always recommended to use git rebase before merge!	
+
+
+
+		-> Repo
+			
+			master : cm1,cm2,cm3
+			
+						cm1,cm2,cm3,f1cm1,f1cm2,f1cm3							# Upon Merging feature_branch1
+						
+						cm1,cm2,cm3,f2cm1,f2cm2,f2cm3,f1cm1,f1cm2,f1cm3			# Upon Merging feature_branch2						
+						
+						cm1,cm2,cm3,f1cm1,f1cm2,f2cm1,f1cm3,f2cm2,f2cm3			# Expected Commit History - Upon Merging feature_branch2 with proper rebase
+						
+		
+				feature_branch1 : cm1,cm2,cm3
+				
+						feature_branch1 : cm1,cm2,cm3,f1cm1,f1cm2,f1cm3
+						
+							
+							git rebase master
+													
+							git switch master
+							
+							git merge feature_branch1
+						
+						
+		
+				feature_branch2 : cm1,cm2,cm3		
+				
+						feature_branch2 : cm1,cm2,cm3,f2cm1,f2cm2,f2cm3
+						
+							git rebase master
+							
+							feature_branch2 : cm1,cm2,cm3,f1cm1,f1cm2,f1cm3,f2cm1,f2cm2,f2cm3							
+		
+							git switch master
+							
+							git merge feature_branch2	
+							
+	
+	- Git Squash Option :::
+	
+	
+		-->	It is used to combine more than one commits into single commit point during merge.
+		
+			- Syn: git merge --squash master 
+			
+			
+		-> Repo:
+			
+			master : cm1,cm2,cm3
+			
+						cm1,cm2,cm3,f1cm1,f1cm2,f1cm3,.........................................,f1cm250					# Upon merging feature_branch1
+			
+				feature_branch1 : cm1,cm2,cm3
+				
+						feature_branch1 : cm1,cm2,cm3,f1cm1,f1cm2,f1cm3,.........................................,f1cm250	
+			
+							git rebase master
+													
+							git switch master
+							
+							git merge --squash feature_branch1
+							
+							git commit -m "Combined commits"
+
+								
+		
+		
+	- Git Cherry-pick ::::
+
+		- It is used to merge the specific commit(s) to the Target Branch
+		
+		
+			- git Cherry-pick <Commit_id1> <Commit_id2> 
+		
+			
+		
+	
+	- Git Stash :::
+	
+		- It is used save the uncommitted changes to the temporary area of the git repository.
+		
+		- It is List Data Structure :::	
+		
+		
+			- git stash list 							# To List the stash list entries 			
+				
+			- git stash save "Message"					# To Save/Create an entry in the Stash List 			
+			
+			- git stash apply 							# To Apply the latest entry back to the staging area 
+		
+			- git stash apply stash@{2}					# To Apply a specific entry back to the staging area 
+		
+			- git stash drop 							# To Delete/Drop the latest entry from the Stash List 
+			
+			- git stash drop stash@{2}					# To Delete/Drop a specific entry from the Stash List
+			
+			- git stash pop								# To Apply the latest entry back to the staging area and Delete that last entry from the Stash List 
+		
+			- git stash pop stash@{2}					# To Apply a specific entry back to the staging area and Delete that specific entry from the Stash List
+			
+			- git stash clear 							# To Clean-up the Stash List.
+		
+	
+	- Working Remote Repositories :::		
+	
+		
+		Local_Machine																							Remote Server 
+		(Git_Client)																							(GitHub)
+		
+			Working Directory 	---------------->	Staging Area  --------------->	Local Repository	--------> 	Remote Repository
+				index.html			git add 		 index.html		git commit 			index.html_v1.0	  git push  	index.html_v1.0
+				index.html			git add 		 index.html		git commit 			index.html_v2.0	  git push  	index.html_v2.0
+				index.html			git add 		 index.html		git commit 			index.html_v3.0	  git push  	index.html_v3.0			
+				index.html			git add 		 index.html		git commit 			index.html_v4.0	  git push  	index.html_v4.0			
+		
+
+	
+	- Developer's Workload :::
+	
+		- Enhancement/Bugfix Project :::
+		
+		
+	- Working with GitHub Repositories ::::
+	
+	
+		- Create Remote GitHub Repositories
+		
+		- Work with Remote Branches 
+		
+		- Pull Request to MErge the Changes 
+		
+		- Git Fetch / Pull 
+		
+		- Keep the Local Repo in-sync with Remote Repository 
+		
+		
+		
+	- ML Project Repository ::::
+	
+	
+				- git init 			# To initialize Local Git Repository				
+			
+				- git add			# To Add the changes from Working Directory to Staging Area 
+
+				- git commit 		# To Commit the Changes from Staging Area to Local Repository
+				
+				- git push 			# To Push the changes from Local Repository to Remote Repository
+				
+				- git clone 		# To Copy/Clone the Entire Remote Repository to Local Machine
+				
+				
+					GitHub Repository URL :
+					
+					
+						- git clone <repo_url>
+						
+						- git clone https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+					
+				
+				- git Fetch/Pull :::
+		
+					-> Both Git fetch and pull are used handle the incremental changes from remote repository.
+					
+					Git Fetch :
+					
+						- It is used to just check for the incremental changes from remote repository, if any incremental changes exist, it will update the details of the changes only in local repository. Git fetch will never Update the Working Directory.
+						
+						- Do explicit merge to update the Working Directory					
+						
+				
+					git Pull :
+					
+						- It is used to check for the incremental changes from remote repository, if any incremental changes exist, it will update the details of the changes in local repository as well as in the Working Directory.	
+
+						- Git Pull is used to Keep the Local Repository In-Sync with Remote Repository
+						
+						
+						- git pull ==> git fetch + git merge 
+		
+		
+				- Fork 				# Is used to Copy one Remote Repository to Another Remote Repository
+
+				- git init 			# To initialize New Local Git Repository
+									# Create .git Directory
+									# Create a default branch - main/master Branch
+										
+	
+	
+		
+		- git remote -v 			# To get the list of Remote Repositories linked with the Local Repository
+		
+		
+		- git remote remove origin 
+		
+
+		- git remote add github-origin https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+		
+		- git remote add az-origin https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+
+
+		
+		- git push -u origin localfeature1
+		
+		
+		
+			- GITHUB UserID 
+			
+			- GITHUB Access Token - PAT			
+	
+  501  cd skillfyme_3008/
+  502  ls
+  503  clear
+  504  ls
+  505  ls
+  506  mkdir testrepo1
+  507  cd testrepo1/
+  508  clear
+  509  git init
+  510  echo "rec1" >> q1.txt
+  511  git add .
+  512  git commit -m "cm1"
+  513  echo "rec1" >> q2.txt
+  514  git add .
+  515  git commit -m "cm2"
+  516  echo "rec1" >> q3.txt
+  517  git add .
+  518  git commit -m "cm3"
+  519  clear
+  520  ls
+  521  git log --oneline
+  522  gti status
+  523  git status
+  524  git branch feature1
+  525  git branch feature2
+  526  git branch
+  527  git log --oneline
+  528  git switch feature1
+  529  ls
+  530  git log --oneline
+  531  echo "rec1" >> a1.txt
+  532  git add .
+  533  git commit -m "f1cm1"
+  534  echo "rec1" >> a2.txt
+  535  git add .
+  536  git commit -m "f1cm2"
+  537  echo "rec1" >> a3.txt
+  538  git add .
+  539  git commit -m "f1cm3"
+  540  git log --oneline
+  541  ls
+  542  git rebase master
+  543  git switch master
+  544  ls
+  545  git log --oneline
+  546  git merge feature1
+  547  git log --oneline
+  548  ls
+  549  git switch feature2
+  550  git log --oneline
+  551  ls
+  552  echo "rec1" >> k1.txt
+  553  git add .
+  554  git commit -m "f2cm1"
+  555  echo "rec1" >> k2.txt
+  556  git add .
+  557  git commit -m "f2cm2"
+  558  echo "rec1" >> k3.txt
+  559  git add .
+  560  git commit -m "f2cm3"
+  561  echo "rec1" >> k4.txt
+  562  git add .
+  563  git commit -m "f2cm4"
+  564  git log --oneline
+  565  git rebase master
+  566  git log --oneline
+  567  git switch master
+  568  git merge feature2
+  569  clear
+  570  ls
+  571  git log --oneline
+  572  git switch feature1
+  573  git log -oneline
+  574  git log --oneline
+  575  git rebase master
+  576  git log --oneline
+  577  clear
+  578  ls
+  579  git log --oneline
+  580  git status
+  581  echo "rec1" >> d1.txt
+  582  git add .
+  583  git commit -m "f1cm1"
+  584  echo "rec1" >> d2.txt
+  585  git add .
+  586  git commit -m "f1cm2"
+  587  echo "rec1" >> d3.txt
+  588  git add .
+  589  git commit -m "f1cm3"
+  590  echo "rec1" >> d4.txt
+  591  git add .
+  592  git commit -m "f1cm4"
+  593  echo "rec1" >> d5.txt
+  594  git add .
+  595  git commit -m "f1cm5"
+  596  git log --oneline
+  597  git rebase master
+  598  git switch master
+  599  ls
+  600  git log --oneline
+  601  git merge --squash feature1
+  602  git status
+  603  git commit -m "Combined Feature1_Changes"
+  604  ls
+  605  git log --oneline
+  606  git show 7ce1d3f
+  607  ls
+  608  git status
+  609  git log --oneline
+  610  git switch -c feature3
+  611  git log --oneline
+  612  echo "rec1" >> w1.txt
+  613  git add .
+  614  echo "rec2" >> w1.txt
+  615  git add .
+  616  git status
+  617  ls
+  618  git switch master
+  619  ls
+  620  git status
+  621  git log --oneline
+  622  git switch feature3
+  623  git status
+  624  git stash list
+  625  git stash save "created for w1.txt"
+  626  git status
+  627  ls
+  628  git switch master
+  629  ls
+  630  git stash list
+  631  git switch feature3
+  632  git status
+  633  echo "rec1" >> w2.txt
+  634  git add .
+  635  git stash save "Created for w2.txt"
+  636  git stash list
+  637  echo "rec1" >> w3.txt
+  638  git add .
+  639  git stash save "Created for w3.txt"
+  640  echo "rec1" >> w4.txt
+  641  git add .
+  642  git stash save "Created for w4.txt"
+  643  echo "rec1" >> w5.txt
+  644  git add .
+  645  git stash save "Created for w5.txt"
+  646  git stash list
+  647  ls
+  648  git stash apply
+  649  git stash list
+  650  git commit -m "Created w5.txt"
+  651  git status
+  652  ls
+  653  git stash drop
+  654  git stash list
+  655  git stash pop
+  656  git status
+  657  git stash list
+  658  git stash save "for w4.txt"
+  659  git stash list
+  660  git stash apply stash@{2}
+  661  git commit -m "w2.txt"
+  662  git status
+  663  ls
+  664  git stash list
+  665  git stash drop stash@{2}
+  666  git stash list
+  667  git stash pop stash@{2}
+  668  git stash list
+  669  git stash clear
+  670  git stash list
+  671  clear
+  672  cd ..
+  673  clear
+  674  mkdir remoterepos
+  675  cd remoterepos/
+  676  clear
+  677  ls
+  678  pwd
+  679  ls
+  680  git clone https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+  681  ls
+  682  cd Remote_Repo1/
+  683  ls
+  684  ls -a
+  685  git branch
+  686  git switch -c localfeature1
+  687  ls
+  688  git log --oneline
+  689  git remote -v
+  690  echo "REC1" >> Local_File1
+  691  git add .
+  692  git commit -m "Created Local_File1"
+  693  git log --oneline
+  694  git push -u origin localfeature1
+  695  git switch main
+  696  git status
+  697  ls
+  698  git log --oneline
+  699  ls
+  700  git fetch
+  701  git status
+  702  ls
+  703  git pull
+  704  ls
+  705  git status
+  706  git log --oneline
+  707  git pull
+  708  ls
+  709  git status
+  710  git remote -v
+  711  git remote remote origin
+  712  git remote remove origin
+  713  git remote -v
+  714  git remote add origin https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+  715  git remote -v
+  716  git remote add az-origin https://github.com/Skillfyme-MLOps-2908/Remote_Repo1.git
+  717  git remote -v
+  718  git push -u az-origin
+  719  cd ..
+  720  clear
+  721  history
+	
+
+Next:::
+
+	- Working with ML Dateset using DVC 
+
+	- ML Workflow --> 
+	
+		- s3 
+		
+		- mlflow 
+
+
+
+		
+#######################
+Day 6 | 13th Sep. 2026
+#######################	
+
+
+	MLOps Tools :::
+	
+		AWS :::
+		
+			- Create AWS Account - Free Tier Account
+			
+				As a root user -->	 
+				
+					
+			
+			- IAM Service --> Create IAM User - IAM Roles
+			
+				- Identify and Access Management Service :::
+					
+					- Authentication 
+						==>	Who can access ?
+						
+					- Authorization
+						==> What sort of action be perform 
+						
+						
+				- RBAC - Role Based Access Control 
+				
+				
+				- Create IAM User ==> Admin Access --> Group Level Access
+				
+				- IAM Policy - Defines Permissions
+				
+				- IAM Role --> 
+				
+
+		To Do :::
+		
+			- AWS Console :::
+
+				- root user ID 
+				
+				- Password 
+				
+				- MFA 
+
+					- Login to AWS Console as a root user 
+					
+					- Create IAM User user profile with Admin Access
+					
+					
+					https://682033467551.signin.aws.amazon.com/console
+
+					skmlopsuser1
+					
+					
+					SkIAMRole1
+
+			
+					
+			- S3 Service --> S3 Buckets -> Datasets & Model Artifacts
+			
+			
+				-> Create S3 Bucket 		skmlopss3bkt1
+				
+			- AWS S3 Buckets -> To manage the ML Datasets 
+		
+	S3 Buckets :::
+	
+	
+		--> Bucket = Directory
+		
+			--> Files -> Keys/ Objects
+			
+		--> Access to Create a S3 Bucket 	
+		
+		--> Create s3 Bucket 		--> skmlopss3bkt1
+
+		Set S3 Bucket Policy :
+				
+		{
+		  "Version": "2012-10-17",
+		  "Statement": [
+			{
+			  "Sid": "Statement1",
+			  "Effect": "Allow",
+			  "Principal": "*",
+			  "Action": [
+				"s3:*"
+			  ],
+			  "Resource": "arn:aws:s3:::skmlopss3bkt1/*"
+			}
+		  ]
+		}						
+			
+			
+		
+		- EC2 Service --> Create EC2 Instance -> Dev / Build / Target Environment 
+			
+
+		- Working with EC2 Service to Launch EC2 Instances ::::
+		
+		
+		
+		Access Remote Server :::		
+		
+			Using SSH Connection:
+			
+				-> Host_Name 			# Public IP Address of VM
+				
+				-> User_Name			# ubuntu
+				
+				-> Access_Key 			- Private Key
+				
+				
+					- EC2 Direct Connection	# Thru Browser 
+					
+					
+					
+					- SSH Agent 		# Windows User
+						
+						- Putty					
+						- MobaXterm 	# On Windows Machine 
+										# https://mobaxterm.mobatek.net/download.html
+											- Choose Home Edition
+												- Installer Edition 
+			
+			
+					- Terminal 			# Mac & WIndows Users			
+			
+				- Install DVC, Python, MLFlow, Docker & Kubernetes
+				
+
+	1. ML Project Repository 		# https://github.com/Skillfyme-MLOps-2908/mlops-core-project
+	
+	
+# Create data/raw/review.csv 
+
+
+review_text,sentiment
+I love this product it works perfectly,positive
+Absolutely fantastic quality and service,positive
+Very happy with the purchase,positive
+Great experience would buy again,positive
+Excellent product highly recommended,positive
+Amazing performance and value,positive
+Satisfied with quality and delivery,positive
+Works exactly as advertised,positive
+Customer support was very helpful,positive
+This is the best purchase I have made,positive
+
+This product is okay not great not bad,neutral
+Average quality nothing special,neutral
+It works but has some issues,neutral
+Neither good nor bad experience,neutral
+Product meets basic expectations,neutral
+Decent but could be improved,neutral
+Acceptable quality for the price,neutral
+Nothing impressive but usable,neutral
+Fine for occasional use,neutral
+Okayish experience overall,neutral
+
+Worst product I have ever bought,negative
+Very disappointed with the quality,negative
+Terrible experience waste of money,negative
+Does not work as expected at all,negative
+Extremely poor build quality,negative
+Bad experience will not recommend,negative
+Product stopped working in two days,negative
+Customer service was terrible,negative
+Totally useless and overpriced,negative
+Highly dissatisfied with this product,negative
+
+I am happy with the fast delivery,positive
+Packaging was good and product works well,positive
+Average packaging but product is decent,neutral
+Late delivery and damaged box,negative
+The item arrived broken,negative
+Very smooth and reliable performance,positive
+Not worth the price paid,negative
+Okay product but slow response,neutral
+Loved the design and usability,positive
+Disappointed with the overall experience,negative	
+
+
+
+
+
+	2. Clone on Build Server 
+	
+	3. Perform Build 				(VM1)
+	
+		-> Use DVC Pipeline
+		
+			- Validate Dataset 
+			
+			- Process Dataset 
+			
+			- Train the Model 
+			
+			- Verify the Accuracy of the Model using MLFlow 
+			
+			- Update the Model Artifacts to s3 Bucket 
+			
+		-> Use Docker 
+		
+			- Create ML Application Images 
+			
+				- UI 
+				
+				- API 
+
+
+
+	DVC ::::	Data Version Control::		# https://dvc.org/  # https://doc.dvc.org/start
+	
+		==> Maintain the Version of ML Datasets.	
+
+
+		--> Install DVC ???
+		
+			- Prepare Virtual Enviroment 
+			
+				-> Install dvc/mlflow/streamlit/fast-api
+	
+	
+	Launch EC2 Instance ::: 
+	
+		- Ubuntu AMI 22.04v with IAM Role(Access s3) -> 
+
+		- Connect to EC2 Instance
+				
+				- Install :	AWS CLI, Docker Cli, git
+				
+				- Install : Python3, Python3 environment pkg
+
+
+# To Setup AWS CLI ::::				https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+
+sudo apt install -y unzip curl
+
+Download AWS CLI v2
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+Unzip installer
+
+unzip awscliv2.zip
+
+Install AWS CLI
+
+sudo ./aws/install
+
+Verify Installation
+aws --version
+
+
+Expected output:
+
+aws-cli/2.x.x Python/3.x Linux/x86_64
+
+
+AWS CLI installed successfully
+
+
+
+Create Python Enviroment::::
+
+#######################
+Day 7 | 20th Sep. 2026
+#######################	
+
+	Package ML Model ::::
+	
+		- Docker 		
+		
+		- Kubernetes 	- Open-Source 
+		
+			--> Container orchestration Tool ::
+			
+				- Micro-Services
+				
+				- ML Project 
+
+
+		- Package Application 
+		
+	Deployment :
+		
+		- What is Deployment ?	
+		
+		- Frequency of Deployment ?
+		
+			- Frequency of Deployment of ML Model ==> 
+			
+				1. Input Data Change 
+				
+				2. Change in the Algorithm
+	
+	
+	MLOps Workflow :
+	
+	
+		- DVC Pipeline 
+		
+		- ML Model CICD Pipeline 	--> Github-Actions 
+		
+		- Kubeflow ==> MLOPs 		
+
+
+
+	- ML Model :
+	
+		1. Model APIs 	(Backend service)	--> Fast-API Service 
+
+		2. UI 								--> Streamlit Tool 
+		
+		
+	- Architecture of ML Model is based on Micro-Services.
+	
+	
+		- Packaged using Container Service and Deployed using Kubernetes Service.
+		
+	
+	- Package ML Model : Container Service - Docker.
+	
+	
+	Docker :::
+	
+		- Containerization :::
+		
+			- It is a process of packaging the Application along with its' dependencies.
+		
+			
+	- Virtual Machines :::
+		
+		-> VMs are Hardware Level Virtualization 
+		-> VMs are created using Hypervisor
+		-> VMs are used to execute the Operating System. Not Application/Task
+		-> VMs will be up and running even if there is no active Application/Task
+		-> VMs consume more space and time to start the Application/Task
+	
+	
+	- Containers :::
+	
+		-> Containers are called as OS Level Virtualization 
+		-> Containers are created using Container Engine 
+		-> Containers are used to execute the Application/Task. Not Operating System
+		-> Containers will immediately goes to exit state if there is no active Application/Task
+		-> Containers consume less space and time to start the Application/Task 
+		
+			- Namespace & Control Groups --> Kernel(Core of OS)
+		
+		
+	- Setup the Container Engine :
+	
+	
+	- Use Cases :::
+	
+		- Infra-Structure Perspectives:
+		
+			-> AMI --> Server Template 
+			
+			-> ML Project: To Test ML Project ==> 150 VMs 
+			
+				Create Virtual Machine 
+				
+					- Install Container Engine 
+					
+						-> C1,2,3,4,5,6,7,8,9,................,150
+				
+					- Save Infra-Structure Cost, by reducing the no. of VMs.
+		
+		
+		- Deployment Perspectives:
+		
+			-> ML Engineers/Data Engineers :
+			
+			
+				Containerize the Model and Deploy to Target Enviroments:
+				
+					- It is a process of packaging the Application along with its' dependencies.	
+
+
+						*.pkl 
+						
+						
+						Package the artifacts along with its dependencies 
+						
+						
+						- Container Image(Package)
+						
+							Create Container Image(Application,dependencies) --> my_mdl:v1.0
+							
+							
+						- Publish the Container to Container Registry(DockerHub)
+						
+						
+						- Deploy the Container Images to the Target Enviroments using Kubernetes
+						
+					-> Test --> Pull my_mdl:v1.0 Image from DockerHub and Execute as Container
+					
+					-> Prod --> Pull my_mdl:v1.0 Image from DockerHub and Execute as Container	
+
+
+	- Setup the Container Engine :::
+	
+		- Create DockerHub :::
+		
+		- Install Docker Engine on Build Environment :::
+		
+		
+		Terminologies ::
+		
+			- Container Engine: 	- It is a Tool to Manage the Container Images and Containers
+									- Eg.: Docker Container Engine.
+									
+			- Image					- Is a static file,which defines the properties of the application to create container
+									- Non-Executable 
+									- Images are create using the Dockerfile Instructions based of incremental layers.
+			
+			- Container				- Executable units of Container image.
+			
+			- Container Registry	- Used to maintain/version control the container images
+									- DockerHub 
+									
+									
+						Eg.: github 	- To Version Control Source Codes 
+							 dockerhub 	- To Version Control container images
+							 
+			- Container Repository	- Sub-set of Container Registry
+									- Can be created based on App Teams/Enviroments 
+									
+	
+		Work with Docker :::
+		
+			- Launch EC2 Instance - Linux Ubuntu 24.04 version .
+			
+			- Login to EC2 Instance 
+			
+			- Install docker 
+			
+				- sudo -i 
+				- apt install docker.io	-y		# https://docs.docker.com/engine/install/ubuntu/
+				
+			- Use Docker CLI Commands to interact with Docker Engine to create/Manage the containers/Images.
+			 
+	- Work with Docker Cli Commands 
+	
+		--> Use Existing Image from DockerHub
+	
+			docker images 			# To get the list of images on the local machine
+
+			docker ps 				# To get the list of active containers on the local machine	
+
+			docker ps -a 			# To get the list of active & inactive containers on the local machine	
+			
+			
+			docker pull ubuntu 		# Download an Container Image from Docker Hub
+			
+				- Syntax: 	docker pull <image>:<tag/version_ID>
+							docker pull <image>							# Always refer to the latest version
+	
+	
+			docker run <image_name>	# To Create a New Container based on the Image Name.
+									# Run/Execute the Container
+			
+			
+			Modes of Execution :::
+
+				- Attached Mode / Foreground Mode 		# Default
+				
+					Eg.: docker run ubuntu sleep 5
+				
+				- Detached Mode / Background Mode 
+				
+					Eg.: docker run -d ubuntu sleep 5
+				
+				- Interactive Mode :::
+				
+					Eg.: docker run -it ubuntu bash
+				
+		
+			docker start <container_id>		# Start the Container 
+			
+			Login to running Container :
+			
+				- docker exec -it <container_id> bash 	# To Login to running container
+			
+				- exit 									# To Logoff from the running container 
+
+			docker stop <container_id>		# Stop the running Container 
+			
+		
+		Working with Web Servers with-in Docker Container.
+		
+		Docker Networking :
+		
+		Port Mapping / Port Binding :::		# To expose the container application to internet
+		
+		
+			Syntax : -p <host_port>:<container_port>
+			
+			Eg.: 
+				docker run -it -p 8080:8080 tomcat:8.0
+			
+				docker run -it -p 8089:8080 tomcat:8.0
+			
+			
+		Access the Container application using the <External_IP/Public_IP>:<host_port>
+		
+	
+		Remove Container :
+		
+			docker rm <container_id>
+		
+		Remove Image :
+		
+			docker rmi <image_id>
+			
+	
+	--> Create New Images ::::
+		
+		- Docker Commit ::	# Infra-Structure perspective
+		
+			- It used to create a new Container Image based on the existing Container reference
+			
+			Syntax: 
+			
+				docker commit <container_id> <DockerHub_Repository_Name>/<New_Container_Image>:<tag/version_ID>
+			Eg.: 
+				
+				docker commit 922ee3d65714 loksaieta/tempimg:v1.0
+				
+		
+		
+		
+		
+		- Docker Build ::	# Development/Deployment Process 
+		
+			- It used to create a new Container Image based on the Dockerfile reference
+			- Dockerfile composed of Dockerfile Instructions 
+		
+		
+			
+		vi Dockerfile 
+		
+		FROM ubuntu
+		RUN apt update -y 
+		RUN apt install git -y 
+		
+			- 
+
+			Syntax: 
+			
+				docker build -t <DockerHub_Repository_Name>/<New_Container_Image>:<tag/version_ID> .		# '.' denotes Dockerfile reference
+			Eg.: 
+				
+				docker build -t loksaieta/dummyimg .			
+			
+									
+		
+		- Publish the Container to Container Registry(DockerHub) :::
+			
+			- Login to Container Registry using Docker CLI Commands 
+			
+				- DockerHUB Login_ID
+				
+					docker login -u loksaieta
+				
+				- PAT - (Password)
+				
+					kjlkjlkjlklk
+					
+					
+					
+			- Push the Container Image to DockerHub :
+			
+				docker push <DockerHub_Repository_Name>/<New_Container_Image>:<tag/version_ID>
+		
+				Eg.: 
+				
+					docker push loksaieta/tempimg:v1.0
+		
+Next:
+
+	MLOPs Workflow :::
+	
+					
+		- Dev: With the Project Source Code 		- DVC, MLFLOW, Test Application - Fast-API, Streamlit web ui.
+			
+		
+		- Build: using Docker 
+		
+		- Deployment: Using Kubernetes
+									
+		
+
+		
+			
+#######################
+Day 8 | 26th Sep. 2026
+#######################	
+	
+	MLOPs Workflow :::
+	
+		- Dev: With the Project Source Code 		- DVC, MLFLOW, Test Application - Fast-API, Streamlit web ui.			
+		
+		- Build: using Docker 
+		
+		- Deployment: Using Kubernetes	
+
+
+	Phase 1:
+	
+	1. DVC is used to manage the Input Dataset for Model Training 
+	
+	2. dvc repro 		# Reproduce  ==> Train the Model # Trigger DVC Pipeline --> Data Validation - Process Data - Train 
+						# dvc.yaml
+						# dvc repro command is used to execute dvc pipeline
+
+	3. Trained Model ==> ML Artifacts ==> model.joblib / pickle 
+	
+	4. Used DVC to maintain the Artifacts - S3 
+
+
+	Phase 2:
+	
+	5. Use that artifacts and dependencies to create Dockerfile and create Docker Image 
+	
+	6. Publish Docker Image to Container Registry
+	
+	7. Deploy to Kubernetes 
+	
+	
+	Phase 3:
+	
+	8. Automate Build and Deployment to Kubernetes using github-actions workflow--> CI/CD Pipeline
+	
+	9. Monitor using Kubeflow(Deployment & Monitor) MLFlow / Prometheus / Grafana 
+	
+	
+
+
+Working with DVC ::::
+
+	--> EC2 Service				# Create Virtual Machines(Dev,Build,Test,Production Environments)	:::	
+
+			--> EC2 Instance	# To Setup Build Environment 
+								# Create an EC2 Instance with IAM Role attached.
+								# Setup Security Group - Inbound Rules. 
+								# Setup MobaXTerm/Putty on Local Machine to access s3 bucket and EC2 Instances 												
+			--> Access EC2 Instance :
+
+								- Using MobaXTerm/Putty (Windows User)
+								- Use Terminal 			(Windows/Mac/Linix User)
+								
+								
+
+	--> Install MLOps related tools :::
+
+			git 
+			docker 
+			python 
+			create virtual environment using python 
+				- DVC  
+				- Streamlit						# Tool To creat UI for for ML Model 
+				- Fast-API 						# Tool To creat API for for ML Model 
+			
+
+			# install git,python,docker	on VM Level 
+			
+				sudo apt install -y \
+					  python3.12 python3.12-venv python3-pip
+
+				Create Virtual Environment ::::
+				
+						python3.12 -m venv loksai-venv
+
+						source loksai-venv/bin/activate
+
+					  
+				sudo apt install docker.io -y
+				
+				
+	- Environment:
+	
+		Dev 			--> 	Owned by the Developers 
+		
+								- Create ML Model Web Interface using Streamlit 
+								
+								- Create ML Model API using Fast-API
+			
+		
+		Build 			--> 	Owned by the DevOps/MLOps Team 
+		
+		Target Environments :
+		
+			- Test 				# Deploy the Package(Docker Image) & Execute 	
+		
+			- Prod 
+
+
+	- Core components of ML Project:
+	
+		- API 										# Backend - fast-api
+		
+		- UI 										# Web UI - streamlit
+		
+		- SRC -> Data_validation, Pre-Processing, Training
+	
+		- dvc .yaml
+		
+		- docker ***
+		
+		- K8s ***
+		
+		- github-workflow ****
+		
+		- requirement.txt
+		
+		
+	- DockerHub Account: https://hub.docker.com/
+	
+Working with MLOps - Build Enviroment:
+
+	- Launch an EC2 Instance - Ubuntu AMI v24.04 (++ IAM Role, 30GB)
+	
+	- Update the Security Group - Allow all/required ports.
+	
+
+				--> Login to EC2 Instance :
+				
+					$ sudo -i 
+					
+					$ apt update -y
+					
+					
+					# Setup AWS Cli on the EC2 Instance 		# Used to access S3 Bucket 
+						
+
+						# To Setup AWS CLI ::::
+
+
+						sudo apt install -y unzip curl
+
+						#Download AWS CLI v2
+						curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+						#Unzip installer
+						unzip awscliv2.zip
+
+						#Install AWS CLI
+						sudo ./aws/install
+
+						#Verify Installation
+						aws --version
+
+					$ aws s3 ls 					# Get the list of s3 bucket - to quickly check for s3 access from EC2 Instance.
+
+
+						
+					# install git,python,docker	on VM Level 
+					
+						sudo apt install -y \
+							  python3.12 python3.12-venv python3-pip
+							  
+					# sudo apt install docker.io -y
+
+
+Build Server :::
+
+- Create Python Virtual Environment to work with MLOps Tools
+
+python3.12 -m venv loksai_env
+
+source loksai_env/bin/activate
+		
+<Download project to build environment>			# Git clone 
+
+cd <project_Folder>
+
+mkdir data 
+cd data 
+mkdir processed 
+mkdir raw
+
+cd ..
+
+mkdir models 
+
+# install dvc Package within the Venv.
+
+pip install dvc_s3									# Install DVC-s3 
+
+dvc --version
+
+pip install -r requirements.txt
+			
+git init 							# Not required if you already cloned the Repo.
+
+dvc init 							# Initialize DVC Repo & Create *dvcignore,config files add to git staging area
+
+dvc remote add -d myremote s3://loksai-edu-mlproject1
+
+git add .dvc/config
+
+git commit -m "Configure DVC S3 remote"
+
+	
+vi data/raw/reviews.csv				# Add sample Records as shown below						# Experiment Iteration can Start from here!	
+
+dvc add data/raw/reviews.csv		# Add data/raw/reviews.csv to git after every dvc add
+
+git add data/raw/reviews.csv.dvc data/raw/.gitignore
+
+git commit -m "Added DVC Data-v1"
+
+dvc repro							# To Execute DVC Pipeline
+
+git add data/processed/.gitignore models/.gitignore dvc.lock			# Add dvc.lock to git after every dvc repro
+
+git commit -m "repro-Processed data-v1"
+
+dvc push 							# Push repro-Processed data 
+
+dvc status							# Status should be: Data and pipelines are up to date.
+
+dvc pull							# Pull the latest changes from Remote S3 Bucket
+			
+
+
+Experimentation ::::
+
+Start MLflow UI (ONLY correct command)
+mlflow ui --host 0.0.0.0 --port 5000 --allowed-hosts '*'
+
+Open in browser
+http://<EC2_PUBLIC_IP>:5000
+
+13.234.59.99:5000
+
+
+### OPTIONAL: MODEL VALIDATION
+Run API locally
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+Open in browser
+http://<EC2_PUBLIC_IP>:8000
+
+13.234.59.99:8000
+http://13.234.59.99:8000/docs
+
+### Run Streamlit
+streamlit run ui/app.py --server.address 0.0.0.0			### Confirm predictions change with new data.
+
+Open in browser
+http://<EC2_PUBLIC_IP>:8501
+
+13.234.59.99:8501
+
+#************************************************************************************************************
+
+# Create data/raw/review.csv 
+
+
+review_text,sentiment
+I love this product it works perfectly,positive
+Absolutely fantastic quality and service,positive
+Very happy with the purchase,positive
+Great experience would buy again,positive
+Excellent product highly recommended,positive
+Amazing performance and value,positive
+Satisfied with quality and delivery,positive
+Works exactly as advertised,positive
+Customer support was very helpful,positive
+This is the best purchase I have made,positive
+
+This product is okay not great not bad,neutral
+Average quality nothing special,neutral
+It works but has some issues,neutral
+Neither good nor bad experience,neutral
+Product meets basic expectations,neutral
+Decent but could be improved,neutral
+Acceptable quality for the price,neutral
+Nothing impressive but usable,neutral
+Fine for occasional use,neutral
+Okayish experience overall,neutral
+
+Worst product I have ever bought,negative
+Very disappointed with the quality,negative
+Terrible experience waste of money,negative
+Does not work as expected at all,negative
+Extremely poor build quality,negative
+Bad experience will not recommend,negative
+Product stopped working in two days,negative
+Customer service was terrible,negative
+Totally useless and overpriced,negative
+Highly dissatisfied with this product,negative
+
+I am happy with the fast delivery,positive
+Packaging was good and product works well,positive
+Average packaging but product is decent,neutral
+Late delivery and damaged box,negative
+The item arrived broken,negative
+Very smooth and reliable performance,positive
+Not worth the price paid,negative
+Okay product but slow response,neutral
+Loved the design and usability,positive
+Disappointed with the overall experience,negative
+
+
+#***********************************************************************************************************
+
+	
+#######################
+Day 9 | 27th Sep. 2026
+#######################	
+
+	
+
+	- Integrate Docker and Kubernetes
+
+	- Deploy to Kubernetes Cluster	(VMs)
+
+	- Open-Source Kubernetes :::
+		
+	- Intro to Kubernetes ::::
+	
+			- Kubernetes is an open-source Container Orchestration Tool
+			- Kubernetes is used to Deploy any type of Containers.
+			- It is used to ensure high availability of the Applications/services running thru Containers.
+			- Used to Ensure High Availability of Containers by creating Replicas of Containers/Pod.
+			- It supports Auto-Scaling & Load Balancing.
+
+			- Self-healing Capability!
+			
+			- Using this we can achieve Continuous Deployment
+			
+				Service Upgrade/Downgrade can be done without any downtime!
+				
+		Managed Kubernetes Services from Service Provider:
+		
+		
+			- AWS 	===> ECS,ECR,EKS 
+			
+			- Azure	===> ACS,ACR,AKS 
+				
+			- GCP 	===> GCE,GCR,GKE 
+			
+		Enviroments:
+
+			Non-Prod 						==>			Prod Enviroment --> Prod_Server1,2,3,4,5,6
+			
+			
+			
+		
+	- 3-tier Application:
+	
+		- Frond-End Layer			C1.1,1.2,1.3 
+		
+		- Business Layer 			C2.1,2.2,2.3 
+		
+		- Databse Layer				C3.1,3.2,3.3 
+		
+		
+		Docker Container Engine:
+		
+			-> Docker Swarm :::
+			
+				- Docker Swarm is an open-source Container Orchestration Tool
+				- Docker Swarm is used to Deploy only the Docker Containers.
+				- It is used to ensure high availability of the Applications/services running thru Containers.
+				- Used to Ensure High Availability of Containers by creating Replicas of Containers
+				- It Will not supports Auto-Scaling & Load Balancing.
+			
+		
+		Kubernetes Architecture:
+		
+			- Kubernetes_Master 
+			
+				- Kubernetes WorkerNodes: 1,2,3,4,5 
+				
+	- Kubernetes Architecture Components
+	
+		- Kubernetes Architecture components :::
+		
+			API_Server 				--> # Acts as an interface to the kubernetes 
+			
+			ETCD 					--> # Single point of Source for Kubernetes Components 
+			
+			Scheduler				--> # To identify the Healthy Node for Deployments
+			
+			Controller Manager 		--> # To run the pods in its desired state  - 3
+			
+			
+			Kubelet 				--> # Is a Kubernetes Agent used to Create & Deploy the Pods
+			
+			KubeProxy				--> # Is used to enable pod networking by create Pod IP Address			
+			
+			CRI - Container RunTime Interface (Container-D)
+									--> # It is used identify the Image from Container Registry for deployment	
+
+	
+	
+	
+	- Kubernetes Architecture Components
+
+	- Kubernetes Terminologies ::	
+	
+		- Kubernetes Cluster	# Is the collection of Worker nodes.
+		
+		
+			Kubernetes_Master(VM)		# To Create and Schedule the Pods
+			
+				Kubernetes_WorkerNode1	# To execute the Application Pods
+				Kubernetes_WorkerNode2		
+				Kubernetes_WorkerNode3				
+
+		- Pod					# Is an atomic unit of scheduling on Kubernetes
+		
+		- Container Images :	
+			- It is a static file(Non-Executable) that define the application properties, and the dependencies to create container 
+			- It composed of various Layers of Instructions.
+			- It is created using Dockerfile.
+			
+		- Containers		:	
+			- Container are the executable units of the Container Images
+			
+		- Container Registry:
+			- Used to Version Control and Maintain the Container Images 
+			- Using DockerHub 
+			
+			
+		- Kubectl 				# Command Line Utility - To interact with Kubernetes Master. 
+		
+		
+		- Manifest Files 		# Application Configuration File => *.yaml / *.json 
+
+	- Setup Kubernetes ::::
+	
+			Kubernetes_Master(VM)				# To Create and Schedule the Pods
+			
+				Kubernetes_WorkerNode1(VM)		# To execute the Application Pods
+				Kubernetes_WorkerNode2(VM)							
+		
+	- Setup Kubernetes using :::
+
+		- Single_Node Kubernetes Cluster 		# Demo/Learning
+				- Minikube,K3s,KIND
+				
+		- Multi_Node Kubernetes Cluster
+				- kubeadm 						# Production Implementations(*)
+				
+
+		Kubernetes_Master(VM)		# To Create and Schedule the Pods		
+			Kubernetes_WorkerNode1(VM)	# To execute the Application Pods
+			Kubernetes_WorkerNode2(VM)
+			
+	
+		Kubernetes Master and Worker Node Configurations :::
+
+			Installation of Kubernetes using Kubeadm :::	
+			
+					1. Launch 3 VMs on AWS Cloud (Ubuntu v24.04) --> (1 Master Node, 2 WorkerNodes)
+				
+				In all the Nodes(i.e., Master Node and WorkerNodes):
+				
+					2. Allow all traffic for all the nodes - just for this demo
+					3. Change the HostName of all the Nodes
+					4. Disable swap configuration in all the nodes
+					5. Install Docker in all the nodes *** (Optional)
+					6. Install CRI - 'Container-D' in all the nodes
+					7. Install Kubeadm,kubelet,kubectl 
+					8. Enable Kubelet	
+				   
+				Only on Master Node:
+				
+					9. Execute Kubeadm Init Command 		# To initialize Kubernetes Master Node
+					10. Enable user Access to Kubernetes
+					11. Install flannel Network plugins for kubeproxy
+
+				Only on WorkerNodes:		
+				
+					12. Execute Kubeadm Join Command 		# To attach the Worknodes with Kubernetes Master Node.
+					
+					
+					
+	- Working with Kubernetes - Kubectl ::::
+	
+		- 
+	
+NExt Session :::
+		
+	- Kubernetes Concepts 
+	
+		- Pods 
+				
+		- Services 
+		
+			- NodePort 
+			
+			- ClusterIP 
+			
+			- Load Balancer 
+			
+		- Controller Objects 
+		
+			- Replicasets 
+			
+			- Deployment Controller 
+			
+		- Namespaces
+		
+
+	- GitHub :::	MLOPs WorkFlow ::: End Result
+	
+	
+		- GitHub-Actions - CICD 
+		
+			-> Self Hosted Agents 
+			
+			-> GitHub Managed Agents 		
+
+
+#######################
+Day 10 | 3rd Oct. 2026
+#######################			
+		
+		
+	- Kubernetes Concepts 
+	
+		- Pods ::
+		
+		
+		kubectl get pods -A -o wide
+		
+		
+		- Create Manifest file : --> Kubernetes Object Definition ::::
+		
+		
+		
+				
+		- Services 
+		
+			- NodePort 	
+	
+	- Namespaces
+
+	- Create Deployment Controller Object :::
+	
+	
+	- Namespaces :
+	
+		- Logical Partitioning of the Kubernetes Cluster
+		- Namespaces are created based on the Enviroment Names, Application Team
+		
+		
+		
+	Non-Prod Enviroments 										Prod Enviroment
+	
+		Kubernetes_Master											Kubernetes_Master			
+			Kubernetes_WorkerNode1,2,3,4,5,6                        	Kubernetes_WorkerNode1,2,3,4,5,6
+				
+			
+		Dev															Namespace: ACTIVE_NS 
+		QA 
+		UAT 														Namespace: PASSIVE_NS
+		
+
+
+	-> 3-Tier Application :
+	
+	
+		-	Frond-End Layer 						--> UI 					==>		pod1.1,1.2,1.3,1.4,1.5 
+		
+
+		
+		-  	Application Layer						--> Business Logic		==> 	pod3.1,3.2,3.3
+		
+		
+
+		-  	Back-End Layer							--> Database 			==> 	pod2.1,2.2,2.3 
+		
+		
+		
+		
+
+	- Replicas of Pods :::	---> Based on the traffic / concurrent users 
+	
+		
+		---> 10 replicas to support 1000 users. 
+		
+					-----> 10000 users in realtime!
+
+
+
+	-> Kubernetes_Cluster:
+	
+	
+		- KWN1	-->
+		
+		- KWN2 	--> 
+		
+	
+	- Kubernetes_Master 
+	
+		Kubernetes_WorkerNode1,2,3,4,5,6,7,8,9,10
+		
+		
+		
+		
+		Non-Prod 								Prod 
+		
+			- Dev 									Prod_Server1,2,3,4,5,6,7(High Availability)
+			- Build 
+			- QA 
+			- UAT 
+			
+
+
+	Pod:	---> Upgrade pod_v1 ===>  pod_v2 	===> Deployment Strategy : Rolling Update Strategy(default)
+	
+		
+	
+		pod_v1			===>		pod_v2
+		
+		pod_v1 			===>		pod_v2
+		
+		pod_v1 			===>		pod_v2
+		
+		
+
+		Deployment Controller Object :::
+		
+			--> It is used to deploy the pods and ensure high availability of pods by creating pod replicas 
+			--> 1. Create Muliple instance/replicas/copies of pods 
+				2. Used to Scale-Up / Scale-Down the Pods 
+				3. Used to Upgrade the application pods 
+				4. Used to Down-grade/roll-back the application pods
+			--> The upgrade/down-grade of application pods can be done without any downtime. 
+			--> To achieve zero-downtime during upgrade/down-grade, By Default, it used Rolling-Update Deployment Strategy.
+				- Supports self-healing.		
+			
+			
+			web_app_image:v1.0		==> 	web_app_image:v1.1
+			
+			pod_1.1:v1.0			==>		pod_1.1:v1.1	
+			pod_1.2:v1.0			==>		pod_1.2:v1.1
+			pod_1.3:v1.0			==>		pod_1.3:v1.0
+				
+				
+		Create Manifest file to work with Deployment Controller Object ::::		
+		
+		Deployment Controller Object creates :
+		
+			- Deployment 
+			- Replicaset
+			- Pod Instances 		
+			
+			Nodes ===> ASG - Collection of Target nodes 	
+
+			Kubectl scale/auto-scale ==> - Pod level 
+			
+			
+
+	- Controller Objects:
+
+		- Replicasets
+		
+		- Deployments
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  labels:
+    app: nginx-deploylbl
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-app
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:stable-otel
+        ports:
+        - containerPort: 80
+
+
+Node Port Service ::::
+
+	--> Expose the pods to internet. ===> Port Mapping/Binding
+
+#k8s/ui-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loksai-ui-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+      - name: ui
+        image: loksaieta/loksai-mlops830ui:latest
+        ports:
+        - containerPort: 8501
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loksai-ui-svc
+spec:
+  type: NodePort
+  selector:
+    app: ui
+  ports:
+  - port: 8501
+    targetPort: 8501
+    nodePort: 30001	
+	
+	
+	loksai-ui-svc    NodePort    10.105.49.206   <none>        8501:30001/TCP   6s
+	
+	
+	  
+Next:::
+		
+	- GitHub :::	MLOPs WorkFlow ::: End Result
+	
+	
+		- GitHub-Actions - CICD 
+		
+			-> Self Hosted Agents 
+			
+			-> GitHub Managed Agents
+			
+
+		
+		
+#######################
+Day 11 | 4th Oct. 2026
+#######################			
+			
+
+	
+	- GitHub :::	MLOPs WorkFlow ::: End Result
+	
+	
+		- GitHub-Actions - CICD 
+		
+			-> Self Hosted Agents 
+			
+			-> GitHub Managed Agents		
+		
+		
+ML Project development phase:
+
+Build Server :::
+
+- Create Python Virtual Environment to work with MLOps Tools
+
+python3.12 -m venv loksai_env
+
+source loksai_env/bin/activate
+		
+<Download project to build environment>			# Git clone 
+
+cd <project_Folder>
+
+mkdir data 
+cd data 
+mkdir processed 
+mkdir raw
+
+cd ..
+
+mkdir models 
+
+# install dvc Package within the Venv.
+
+pip install dvc_s3									# Install DVC-s3 
+
+dvc --version
+
+pip install -r requirements.txt
+			
+git init 							# Not required if you already cloned the Repo.
+
+dvc init 							# Initialize DVC Repo & Create *dvcignore,config files add to git staging area
+
+dvc remote add -d myremote s3://loksai-edu-mlproject1
+
+git add .dvc/config
+
+git commit -m "Configure DVC S3 remote"
+
+	
+vi data/raw/reviews.csv				# Add sample Records as shown below						# Experiment Iteration can Start from here!	
+
+dvc add data/raw/reviews.csv		# Add data/raw/reviews.csv to git after every dvc add
+
+git add data/raw/reviews.csv.dvc data/raw/.gitignore
+
+git commit -m "Added DVC Data-v1"
+
+dvc repro							# To Execute DVC Pipeline
+
+git add data/processed/.gitignore models/.gitignore dvc.lock			# Add dvc.lock to git after every dvc repro
+
+git commit -m "repro-Processed data-v1"
+
+dvc push 							# Push repro-Processed data 
+
+dvc status							# Status should be: Data and pipelines are up to date.
+
+dvc pull							# Pull the latest changes from Remote S3 Bucket
+
+Experimentation ::::
+
+Start MLflow UI (ONLY correct command)
+mlflow ui --host 0.0.0.0 --port 5000 --allowed-hosts '*'
+
+Open in browser
+http://<EC2_PUBLIC_IP>:5000
+
+13.234.59.99:5000
+
+
+### OPTIONAL: MODEL VALIDATION
+Run API locally
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+
+Open in browser
+http://<EC2_PUBLIC_IP>:8000
+
+13.234.59.99:8000
+http://13.234.59.99:8000/docs
+
+### Run Streamlit
+streamlit run ui/app.py --server.address 0.0.0.0			### Confirm predictions change with new data.
+
+Open in browser
+http://<EC2_PUBLIC_IP>:8501
+
+13.234.59.99:8501
+		
+		
+		
+git push 	# 		Remote Github Repo :
+
+
+Trigger the github-actions workflow ->
+
+
+Deployment :
+
+GitHb-Actions Workflow :
+
+	Build Job:	
+		Build the Container Image - V1
+		
+		Publish the Image to Container Registry - V1 
+	
+	Deployment Job:	
+		Deployed to Kubernetes Cluster - V1
+
+			- Login to Container Registry using Docker CLI Commands 
+			
+				- DockerHUB Login_ID
+				
+					docker login -u loksaieta
+				
+				- PAT - (Password)
+				
+					sdfasdfasdfasdfasdfsadafsdfa
+					
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  # ============================
+  # JOB 1: Build & Push Images
+  # ============================
+  build:
+    name: Build & Push to DockerHub
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Login to DockerHub
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # Build API image
+    - name: Build API Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830api:latest -f docker/Dockerfile.api .
+
+    # Build UI image
+    - name: Build UI Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830ui:latest -f docker/Dockerfile.ui .
+
+    # Push API image
+    - name: Push API image
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830api:latest
+
+    # Push UI image
+    - name: Push UI image
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830ui:latest
+
+  # =============================
+  # JOB 2: Deploy to Kubernetes
+  # =============================
+  deploy:  
+    name: Deploy to Kubernetes
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup kubectl
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ secrets.KUBECONFIG_DATA }}" > ~/.kube/config
+
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/api-deployment.yaml
+        kubectl apply -f k8s/ui-deployment.yaml
+		
+		
+		
+		
+DockerHub Repo:
+
+docker tag ${{ secrets.DOCKER_USERNAME }}/loksai-mlops830api:${BUILD_NUMBER} loksaieta/loksai-eta-app:latest
+
+	stage_repo
+		- v1
+		- v2
+		- v3
+	
+	
+	prod_repo/latest
+		- latest 
+		
+		
+		
+		
+		kubectl create -f k8s/api-deployment.yaml
+		
+		kubectl apply -f k8s/api-deployment.yaml
+		
+		
+		
+	- Single Node Kubernetes cluster:
+	
+		--> Using Minikube/K3s/KIND 
+		
+https://docs.k3s.io/	
+
+
+
+
+
+
+	
+		
+	Github-Actions :::::
+	
+	Automate the Model Creation and Containerization using CICD Workflow - github-actions workflow.
+	
+	Setup-self-hosted Agent on github
+	
+		- Build_Server 
+		- Deployment Server 
+	
+	Deploy using Kubernetes 
+	
+		1. Launch a Target Server / Kubernetes Cluster & Attach IAM Role for S3.
+		2. Open all the required ports 
+		3. Login and Install the required packages
+				- Docker / K3s/Minikube/Kubeadm 
+
+
+			Use AWS Ubuntu - 22.04V AMI 
+			
+			- sudo -i 
+			
+			- apt update -y  
+			
+			- curl -sfL https://get.k3s.io | sh -
+			
+			- sudo systemctl status k3s
+			
+			- kubectl get nodes 
+
+			
+				- Install unzip utility / curl 
+				
+				- Install aws-cli 
+				
+sudo -i
+
+apt install unzip curl -y
+
+METHOD 1 — Install AWS CLI v2 (Recommended)
+
+AWS CLI v2 is the latest, stable version.
+
+Step 1 — Download the installer
+cd /tmp
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+Step 2 — Unzip
+sudo apt install -y unzip
+unzip awscliv2.zip
+
+Step 3 — Install
+sudo ./aws/install
+
+Step 4 — Verify
+aws --version
+
+
+You should see something like:
+
+aws-cli/2.18.x Python/3.x.x Linux/x86_64
+
+					
+		4. Setup the Credentials:
+			- Create linux user - devopsadminuser
+				- valid Credentials - 
+					 Recommended to have ssh-key - public_Key & Private Keys 
+
+#Add User : 
+
+useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+
+su - devopsadmin
+
+#ssh-keygen
+
+#for Ubuntu ::
+#ssh-keygen -t rsa -b 2048 -m PEM								#ubuntu 20.04
+
+ssh-keygen -t ecdsa -b 521										#ubuntu 22.04 or higher version of ubuntu				
+
+
+ls ~/.ssh 
+
+#You should see following two files:
+
+#id_ecdsa - private key
+#id_ecdsa.pub - public
+
+
+#cat id_rsa.pub > authorized_keys
+
+cat id_ecdsa.pub > authorized_keys
+
+chmod 600 /home/devopsadmin/.ssh/*
+
+					 
+				- Enable user access to kubernetes Master 
+				
+					- Create .kube/config under user's home dir. 
+					- Use this user's kube/config file content as token for Authentication on github runner.
+
+root: visudo 
+					
+devopsadmin ALL=(ALL) NOPASSWD: ALL
+
+save & exit
+
+su - devopsadmin
+
+###################### Based on kubeadm ########################
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+###################### Based on kubeadm ########################
+
+###################### Based on k3s ########################
+
+
+mkdir -p $HOME/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
+sudo chown $USER:$USER $HOME/.kube/config
+
+export KUBECONFIG=$HOME/.kube/config
+echo 'export KUBECONFIG=$HOME/.kube/config' >> ~/.bashrc
+
+###################### Based on k3s ########################
+
+
+kubectl get nodes
+										
+cat /home/devopsadmin/.kube/config 			# create Repository Secret in pipeline
+
+					
+		5. Setup github self-hosted action-runner
+		
+			- Goto the Repo level setting 
+			- Actions -> Runner 
+			- Create Runner based on the OS & follow the instructions. 	
+		
+Download:		# just for reference.
+
+# Create a folder
+$ mkdir actions-runner && cd actions-runner# Download the latest runner package
+$ curl -o actions-runner-linux-x64-2.337.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.337.0/actions-runner-linux-x64-2.337.0.tar.gz# Optional: Validate the hash
+$ echo "70920811a4f8ad4328818682bca5c6469c1c942fab52448868071d0063816613  actions-runner-linux-x64-2.337.0.tar.gz" | shasum -a 256 -c# Extract the installer
+$ tar xzf ./actions-runner-linux-x64-2.337.0.tar.gz
+
+Configure :
+
+# Create the runner and start the configuration experience
+$ ./config.sh --url https://github.com/Skillfyme-MLOps-2908/mlops-core-project --token AO62WFVLFOEU6OB3HLHJRW3KYKHAC# Last step, run it!
+$ ./run.sh
+
+Using your self-hosted runner :
+
+# Use this YAML in your workflow file for each job
+runs-on: self-hosted		
+		
+		
+		
+Next ::::
+
+	Monitoring the Infra-Structure & and the ML Applications deployed on Kubernetes Cluster ::::
+	
+	
+	Continuous Monitoring :
+	
+		- Prometheus & Grafana
+		
+		- MLflow 
+		
+		- Kubeflow Pipeline :
+		
+			- GUI based interface to deploy kubernetes Objects - ML Application
+			
+			
+		- Airflow :
+		
+		
+		===> Non-Containerized workload :
+		
+				--> Airflow(build&Deployment Orchestration) & MLflow(Experimentations)
+				
+		===> Containerized workload :
+		
+				--> Kubeflow(Container Orchestration) & MLflow(Experimentations)				
+		
+			
+		
+		cicd --> Happy path 
+		
+		adhoc job: workflow --> --> desired img, artifact ver
+		
+		
+		
+		
