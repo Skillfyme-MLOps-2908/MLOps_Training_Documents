@@ -3684,6 +3684,171 @@ Next ::::
 		
 		adhoc job: workflow --> --> desired img, artifact ver
 		
+
+
+#######################
+Day 12 | 10th Oct. 2026
+#######################			
 		
+		
+		Monitoring using Prometheus & Grafana
+		
+		--> Helm Charts == Repos 
+		
+			Helm is the package manager for Kubernetes
+			
+			apt --> Manage packages on Linux Ubuntu Machines
+			
+			
+			Kubernetes Cluster :
+			
+				Kubernetes_Master 
+					Kubernetes_WorkerNode1,2,3,4,5,..........,n
+		
+		--> Using Helm will setup Prometheus & Grafana for Kubernetes
+		
+		
+		
+		--> Monitor Tools/Services are based on Clients/Server Architecture
+		
+		
+				Monitoring Server (VM)	==> Install Prometheus&Grafana
+				
+					--> Target Machines ==> Monitoring Service Agent to be install in all the traget machines.
+											i.e., Prometheus Agent 
+		
+		
+		
+		--> Infra-Structure Monitoring 
+				--> Prometheus,Grafana,Dynatrace,splunk,Nagios
+		
+		--> Application Monitoring 
+				--> AppDynamics,Datadog
+				
+				
+				
+		===> Prometheus		---> Monitoring Tool/Service 
+		
+		===> Grafana		---> Visualization Tool/Service
+		
+		
+		1. Without Kubernetes 
+			- Prod_Servers1,2,3,4,5
+			
+			-> Setup a Dedicated Monitoring Server --> Install Prometheus & Grafana Dashboard Server
+			
+			-> Install Node Exporter Agent, Link all the Prod_Server1,2,3,4,5 as target to Prometheus Server
+			
+			-> Setup Grafana Dashboard Server 
+
+			
+
+		2. With Kubernetes
+		
+			- If the Application Services are deployed using Kubernetes,
+			
+				--> Use Helm to setup Prometheus and Grafana and execute as pods
+		
+		
+		Kubernetes Architecture :::
+
+	- Overview of Kubeflow :::
+	
+		--> Kubeflow to Deploy the ML Model to Kubernetes :::
+		
+			- Workflow
+			
+Kubeflow is a platform for data scientists and machine learning engineers containing the best of both worlds’ functionalities. Data scientists can use Kubeflow to experiment with ML models and orchestrate their experiments on Kubernetes in the most efficient way. 
+	
+	Install and Configure Kubeflow Pipelines:
+	
+	
+	Data Validation 
+	
+	Pre-Processing 
+	
+	Train Model 
+	
+	
+	
+	Dev/Build 	- Install Kubeflow pipeline 
+	
+				- Create Virtual Environment 
+				
+				- Prepare the Kubeflow Project  --> *.py
+				- Generate *.yaml 	# Kubernetes Manifest File 
+				
+
+	Kubeflow Dashboard:
+	
+				- Kubernetes_Master --> configure kubeflow pipeline 
+				
+				- Using port mapping expose the kubeflow pods to internet 
+	
+				- Upload *.yaml to Kubeflow Dashboard for deployment.
+				
+				- Deployed to Kubernetes 
+
+
+STAGE 1 - Setup K3s :
+
+Launch EC2 Instance :
+
+	t2.large / t2.xlarge
+	
+	50G EBS Volume 
+
+
+sudo apt update && sudo apt upgrade -y
+
+curl -sfL https://get.k3s.io | sh -
+
+kubectl get nodes
+
+#Add Swap
+
+sudo fallocate -l 4G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+
+
+STAGE 2 — Install Kubeflow Pipelines
+
+#Create namespace
+
+kubectl create ns kubeflow
+
+#Install Kubeflow Pipelines
+
+kubectl apply -k \
+github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources
+
+Then
+
+kubectl apply -k \
+github.com/kubeflow/pipelines/manifests/kustomize/env/dev
+
+Wait for pods
+
+kubectl get pods -n kubeflow
+
+When all pods Running.
+
+Access Kubeflow UI
+
+Port forward
+
+kubectl port-forward --address 0.0.0.0 -n kubeflow svc/ml-pipeline-ui 8080:80
+
+
+Open
+
+http://<Public_IP>:8080
+
+Kubeflow dashboard appears.		
 		
 		
