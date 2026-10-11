@@ -3851,4 +3851,457 @@ http://<Public_IP>:8080
 
 Kubeflow dashboard appears.		
 		
+
+
+
+#######################
+Day 13 | 11th Oct. 2026
+#######################	
+
+
+	- Kubeflow :::
+	
+	- Orchestration using Airflow ::::
+	
+		ETL --> 
 		
+		DV->DP->TM->EM -->
+		
+		
+		https://airflow.apache.org/docs/apache-airflow/stable/index.html
+	
+
+	- Advanced Deployment Pattern ::::
+	
+		--->
+		
+		Kubernetes --> Deployment Strategy ==> Rolling-Update Strategies
+		 
+
+	- Hyperparameter Tuning with Optuna :::
+	
+	- Overview of AWS Sagemaker AI ::::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###################################################
+
+
+Step 1 — Create the project setup scriptCcreate the project directory, Python virtual environment, requirements file, and pipeline source file.
+
+mkdir -p ~/MLProjects/kubeflow-data-validation
+cd ~/MLProjects/kubeflow-data-validation
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+pip install "kfp>=2.9,<3"
+
+
+Create requirements.txt:
+cat > requirements.txt <<'EOF'
+kfp>=2.9,<3
+EOF
+
+Step 2 — Create the complete pipeline
+Create the file:
+vi pipeline.py
+
+
+Paste this complete code:	
+
+
+from pathlib import Path
+
+from kfp import compiler, dsl
+from kfp import Dataset, Input, Model, Output
+
+
+# ---------------------------------------------------------
+# COMPONENT 1: LOAD AND VALIDATE DATA
+# ---------------------------------------------------------
+@dsl.component(
+    base_image="python:3.19-slim",
+    packages_to_install=[
+        "pandas==2.2.3",
+        "scikit-learn==1.5.2",
+    ],
+)
+def validate_data(
+    dataset: Output[Dataset],
+) -> str:
+    import pandas as pds
+    from sklearn.datasets import load_breast_cancer
+
+    # Load a built-in dataset; no external CSV download needed.
+    source = load_breast_cancer(as_frame=True)
+    df = source.frame.copy()
+
+    # Validation rules.
+    required_columns = list(source.feature_names) + ["target"]
+
+    missing_columns = [
+        col for col in required_columns
+        if col not in df.columns
+    ]
+
+    if missing_columns:
+        raise ValueError(
+            f"Missing required columns: {missing_columns}"
+        )
+
+    if df.empty:
+        raise ValueError("Dataset is empty")
+
+    if df.isnull().any().any():
+        raise ValueError("Dataset contains missing values")
+
+    if not df["target"].isin([0, 1]).all():
+        raise ValueError("Target must contain only 0 and 1")
+
+    feature_columns = [
+        col for col in df.columns
+        if col != "target"
+    ]
+
+    if not all(
+        pd.api.types.is_numeric_dtype(df[col])
+        for col in feature_columns
+    ):
+        raise ValueError("All features must be numeric")
+
+    # Write the validated dataset to the KFP artifact path.
+    df.to_csv(dataset.path, index=False)
+
+    summary = (
+        f"Validation passed. Rows={len(df)}, "
+        f"Features={len(feature_columns)}, "
+        f"Target=target"
+    )
+
+    print(summary)
+    return summary
+
+
+# ---------------------------------------------------------
+# COMPONENT 2: PROCESS DATA
+# ---------------------------------------------------------
+@dsl.component(
+    base_image="python:3.19-slim",
+    packages_to_install=[
+        "pandas==2.2.3",
+        "scikit-learn==1.5.2",
+    ],
+)
+def process_data(
+    input_dataset: Input[Dataset],
+    train_dataset: Output[Dataset],
+    test_dataset: Output[Dataset],
+) -> str:
+    import pandas as pds
+    from sklearn.model_selection import train_test_split
+
+    df = pd.read_csv(input_dataset.path)
+
+    if "target" not in df.columns:
+        raise ValueError("Target column is missing")
+
+    X = df.drop(columns=["target"])
+    y = df["target"]
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=0.20,
+        random_state=42,
+        stratify=y,
+    )
+
+    train_df = X_train.copy()
+    train_df["target"] = y_train
+
+    test_df = X_test.copy()
+    test_df["target"] = y_test
+
+    train_df.to_csv(train_dataset.path, index=False)
+    test_df.to_csv(test_dataset.path, index=False)
+
+    summary = (
+        f"Processing passed. "
+        f"Training rows={len(train_df)}, "
+        f"Testing rows={len(test_df)}"
+    )
+
+    print(summary)
+    return summary
+
+
+# ---------------------------------------------------------
+# COMPONENT 3: TRAIN MODEL
+# ---------------------------------------------------------
+@dsl.component(
+    base_image="python:3.19-slim",
+    packages_to_install=[
+        "pandas==2.2.3",
+        "scikit-learn==1.5.2",
+        "joblib==1.4.2",
+    ],
+)
+def train_model(
+    train_dataset: Input[Dataset],
+    model: Output[Model],
+) -> str:
+    import joblib
+    import pandas as pd
+    from sklearn.ensemble import RandomForestClassifier
+
+    df = pd.read_csv(train_dataset.path)
+
+    if df.empty or "target" not in df.columns:
+        raise ValueError("Invalid training dataset")
+
+    X_train = df.drop(columns=["target"])
+    y_train = df["target"]
+
+    classifier = RandomForestClassifier(
+        n_estimators=100,
+        random_state=42,
+        n_jobs=1,
+    )
+
+    classifier.fit(X_train, y_train)
+
+    # Save the trained model to the KFP model artifact.
+    joblib.dump(classifier, model.path)
+
+    print(f"Model artifact saved: {model.path}")
+    print(f"Training rows: {len(df)}")
+
+    return "Random Forest model training completed"
+
+
+# ---------------------------------------------------------
+# COMPONENT 4: EVALUATE MODEL
+# ---------------------------------------------------------
+@dsl.component(
+    base_image="python:3.19-slim",
+    packages_to_install=[
+        "pandas==2.2.3",
+        "scikit-learn==1.5.2",
+        "joblib==1.4.2",
+    ],
+)
+def evaluate_model(
+    test_dataset: Input[Dataset],
+    model: Input[Model],
+    metrics: Output[Metrics],
+) -> float:
+    import joblib
+    import pandas as pd
+    from sklearn.metrics import (
+        accuracy_score,
+        precision_score,
+        recall_score,
+        f1_score,
+    )
+
+    df = pd.read_csv(test_dataset.path)
+
+    if df.empty or "target" not in df.columns:
+        raise ValueError("Invalid testing dataset")
+
+    X_test = df.drop(columns=["target"])
+    y_test = df["target"]
+
+    classifier = joblib.load(model.path)
+    predictions = classifier.predict(X_test)
+
+    accuracy = float(
+        accuracy_score(y_test, predictions)
+    )
+
+    precision = float(
+        precision_score(
+            y_test, predictions, zero_division=0
+        )
+    )
+
+    recall = float(
+        recall_score(
+            y_test, predictions, zero_division=0
+        )
+    )
+
+    f1 = float(
+        f1_score(
+            y_test, predictions, zero_division=0
+        )
+    )
+
+    metrics.log_metric("accuracy", accuracy)
+    metrics.log_metric("precision", precision)
+    metrics.log_metric("recall", recall)
+    metrics.log_metric("f1_score", f1)
+
+    print(f"Accuracy:  {accuracy:.4f}")
+    print(f"Precision: {precision:.4f}")
+    print(f"Recall:    {recall:.4f}")
+    print(f"F1 score:  {f1:.4f}")
+
+    return accuracy
+
+
+# ---------------------------------------------------------
+# PIPELINE DEFINITION
+# ---------------------------------------------------------
+@dsl.pipeline(
+    name="data-validation-processing-training",
+    description=(
+        "Validate data, process features, "
+        "train a model, and evaluate performance."
+    ),
+)
+def ml_pipeline():
+    validation_task = validate_data()
+
+    processing_task = process_data(
+        input_dataset=validation_task.output["dataset"]
+    )
+
+    training_task = train_model(
+        train_dataset=processing_task.output["train_dataset"]
+    )
+
+    evaluate_model(
+        test_dataset=processing_task.output["test_dataset"],
+        model=training_task.outputs["model"],
+    )
+
+
+# ---------------------------------------------------------
+# COMPILE PIPELINE
+# ---------------------------------------------------------
+if __name__ == "__main__":
+    output_file = "kubeflow_ml_pipeline.yaml"
+
+    compiler.Compiler().compile(
+        pipeline_func=ml_pipeline,
+        package_path=output_file,
+    )
+
+    print(f"Pipeline compiled successfully: {output_file}")
+
+
+Save and exit.
+
+What each component teaches
+
+Component				Learning objective										Output
+
+validate_data			Data-quality checks and validation failures				Validated dataset
+process_data			Feature/target separation and train/test split			Training and testing datasets
+train_model				Model fitting and artifact creation						Trained model
+evaluate_model			Classification metrics and evaluation					Accuracy, precision, recall, F1
+
+
+
+Step 3 — Compile the pipeline
+
+Run:
+cd ~/MLProjects/kubeflow-data-validation
+source .venv/bin/activate
+
+python pipeline.py
+
+
+Expected output:
+Pipeline compiled successfully: kubeflow_ml_pipeline.yaml
+
+
+Verify that the file exists:
+ls -lh kubeflow_ml_pipeline.yaml
+		
+		
+
+Step 4 — Upload the pipeline to Kubeflow
+
+You can use the UI you already set up.
+
+1. Open your Kubeflow Pipelines UI.
+2. Go to Pipelines.
+3. Select Upload pipeline.
+4. Choose kubeflow_ml_pipeline.yaml from your EC2 project directory.
+5. Enter the name data-validation-processing-training.
+6. Complete the upload.
+
+
+Step 5 — Execute the pipeline
+
+In the Kubeflow UI:
+
+1. Open the uploaded pipeline.
+2. Click Create run or Run.
+3. Name the run first-ml-training-run.
+4. Start the run.
+5. Open the pipeline graph and watch the four components execute.
+
+The graph should show this dependency chain:
+	
+	validate_data → process_data → train_model → evaluate_model
+
+The data artifacts connect the components, so each step receives the output produced by the preceding stage.
+
+
+Step 6 — Verify execution on Kubernetes
+
+While the run is active, open another SSH session to EC2 and run:
+
+	kubectl get pods -A -w
+
+
+You should see Kubernetes workloads created for the pipeline execution. The exact pod names and namespace depend on your KFP installation.
+To check the namespace used for KFP:
+
+	kubectl get pods -A | grep -E 'pipeline|workflow'	
+
+
+
