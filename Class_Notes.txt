@@ -4304,4 +4304,470 @@ To check the namespace used for KFP:
 	kubectl get pods -A | grep -E 'pipeline|workflow'	
 
 
+##############################################################################
+AIRFLOW::::
+##############################################################################
 
+Apache Airflow ::::
+
+OS : Ubuntu 24.04
+
+Phase 1: Launch EC2
+Recommended EC2
+
+Instance Type : t3.large
+vCPU : 2
+RAM : 8 GB
+Storage : 30 GB gp3
+OS : Ubuntu 24.04 LTS
+Security Group
+
+22 SSH
+8080 Airflow UI
+
+Phase 2: Install Dependencies
+
+
+apt update
+apt upgrade -y
+ 
+apt install -y \
+python3 \
+python3-pip \
+python3-venv \
+build-essential \
+curl \
+wget \
+git \
+vim \
+tree \
+htop
+
+Phase 3: Create Python Environment
+
+
+mkdir -p /root/projects
+ 
+cd /root/projects
+ 
+python3 -m venv airflow_env
+
+Activate:
+
+
+source /root/projects/airflow_env/bin/activate
+
+Verify:
+
+
+which python
+
+Expected:
+
+
+/root/projects/airflow_env/bin/python
+
+Phase 4: Install Airflow
+
+export AIRFLOW_VERSION=2.10.5
+export PYTHON_VERSION=3.12
+ 
+export CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+ 
+pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
+
+Verify:
+
+
+airflow version
+
+Phase 5: Configure Airflow Home
+
+export AIRFLOW_HOME=/root/airflow
+
+Add permanently:
+
+
+echo 'export AIRFLOW_HOME=/root/airflow' >> ~/.bashrc
+source ~/.bashrc
+
+Verify:
+
+
+echo $AIRFLOW_HOME
+
+Output:
+
+
+/root/airflow
+Phase 6: Initialize Airflow
+
+airflow db migrate
+
+Phase 7: Create Admin User
+
+airflow users create \
+--username admin \
+--firstname Airflow \
+--lastname Admin \
+--role Admin \
+--email admin@test.com
+
+Password:
+
+
+admin123
+
+Phase 8: Create Project Structure
+
+mkdir -p /root/airflow/dags
+ 
+mkdir -p /root/airflow/data
+
+Verify:
+
+
+tree /root/airflow
+
+Expected:
+
+Phase 9: Create Sample Dataset
+
+vi /root/airflow/data/sales.csv
+
+Paste:
+
+CSV
+order_id,product,quantity,price
+1001,Laptop,2,50000
+1002,Mouse,5,500
+1003,Keyboard,3,1500
+1004,Monitor,2,12000
+1005,Headset,4,2500
+
+Verify:
+
+
+cat /root/airflow/data/sales.csv
+
+Phase 10: Install Pandas
+
+pip install pandas
+
+Verify:
+
+
+python -c "import pandas; print(pandas.__version__)"
+
+Phase 11: Create DAG
+
+File:
+
+
+vi /root/airflow/dags/sales_pipeline.py
+
+Paste:
+
+Python::
+
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime
+import pandas as pd
+import os
+
+AIRFLOW_HOME = "/root/airflow"
+
+INPUT_FILE = f"{AIRFLOW_HOME}/data/sales.csv"
+OUTPUT_FILE = f"{AIRFLOW_HOME}/data/output.csv"
+
+
+def extract():
+
+    print("Reading Input File")
+
+    df = pd.read_csv(INPUT_FILE)
+
+    print(df)
+
+    print("Extract Completed")
+
+
+def transform():
+
+    df = pd.read_csv(INPUT_FILE)
+
+    df["revenue"] = df["quantity"] * df["price"]
+
+    df.to_csv(OUTPUT_FILE, index=False)
+
+    print(df)
+
+    print("Transform Completed")
+
+
+def load():
+
+    df = pd.read_csv(OUTPUT_FILE)
+
+    total_revenue = df["revenue"].sum()
+
+    print("=" * 50)
+
+    print(f"TOTAL REVENUE = {total_revenue}")
+
+    print("=" * 50)
+
+    print("Load Completed")
+
+
+with DAG(
+    dag_id="sales_etl_pipeline",
+    start_date=datetime(2025, 1, 1),
+    catchup=False,
+    schedule=None,
+    tags=["training"],
+) as dag:
+
+    extract_task = PythonOperator(
+        task_id="extract",
+        python_callable=extract,
+    )
+
+    transform_task = PythonOperator(
+        task_id="transform",
+        python_callable=transform,
+    )
+
+    load_task = PythonOperator(
+        task_id="load",
+        python_callable=load,
+    )
+
+    extract_task >> transform_task >> load_task
+
+Phase 12: Validate DAG
+
+List DAGs:
+
+
+airflow dags list
+
+Expected:
+
+
+sales_etl_pipeline
+
+List Tasks:
+
+
+airflow tasks list sales_etl_pipeline
+
+Expected:
+
+
+extract
+transform
+load
+
+Phase 13: Test Tasks
+Extract
+
+airflow tasks test sales_etl_pipeline extract 2025-01-01
+
+Expected:
+
+
+Reading Input File
+Extract Completed
+Transform
+
+airflow tasks test sales_etl_pipeline transform 2025-01-01
+
+Expected:
+
+
+Transform Completed
+Load
+
+airflow tasks test sales_etl_pipeline load 2025-01-01
+
+Expected:
+
+
+TOTAL REVENUE = 141000
+Verify Output File
+
+cat /root/airflow/data/output.csv
+
+Expected:
+
+CSV
+order_id,product,quantity,price,revenue
+1001,Laptop,2,50000,100000
+1002,Mouse,5,500,2500
+1003,Keyboard,3,1500,4500
+1004,Monitor,2,12000,24000
+1005,Headset,4,2500,10000
+
+Phase 14: Start Airflow
+
+Terminal 1
+
+
+source /root/projects/airflow_env/bin/activate
+ 
+export AIRFLOW_HOME=/root/airflow
+ 
+airflow scheduler
+
+Terminal 2
+
+
+source /root/projects/airflow_env/bin/activate
+ 
+export AIRFLOW_HOME=/root/airflow
+ 
+airflow webserver --port 8080
+
+Phase 15: Open Dashboard
+
+Browser:
+
+
+http://EC2-PUBLIC-IP:8080
+
+Login:
+
+
+Username: admin
+Password: admin123
+
+Phase 16: Run DAG From UI
+
+Open:
+
+
+sales_etl_pipeline
+
+Turn ON:
+
+
+Unpause DAG
+
+Click:
+
+
+Trigger DAG
+
+Phase 17: Validate Execution
+
+Open:
+
+
+Graph View
+
+You should see:
+
+
+extract
+|
+transform
+|
+load
+
+Success:
+
+
+extract
+transform
+load
+Validate Logs
+Extract Log
+
+Reading Input File
+Extract Completed
+Transform Log
+
+Transform Completed
+Load Log
+
+TOTAL REVENUE = 141000
+Optional Cleanup
+
+Hide Airflow example DAGs.
+
+Edit:
+
+
+vi /root/airflow/airflow.cfg
+
+Change:
+
+INI
+load_examples = True
+
+to:
+
+INI
+load_examples = False
+
+Restart Airflow:
+
+
+pkill -f airflow
+
+Start again:
+
+
+airflow scheduler
+
+airflow webserver --port 8080
+
+
+
+
+Useful Commands::::
+
+List DAGs
+
+
+airflow dags list
+
+Show Tasks
+
+
+airflow tasks list sales_etl_pipeline
+
+Trigger DAG
+
+
+airflow dags trigger sales_etl_pipeline
+
+Pause DAG
+
+
+airflow dags pause sales_etl_pipeline
+
+Unpause DAG
+
+
+airflow dags unpause sales_etl_pipeline
+
+Check Airflow Version
+
+
+airflow version
+
+Check Running Processes
+
+
+ps -ef | grep airflow	
+		
+		
+		
+		
+		
+		
+		
+		
